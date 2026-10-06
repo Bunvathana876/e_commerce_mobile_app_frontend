@@ -19,19 +19,24 @@ class WishlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wishlist = WishlistController.instance;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: isDark
+            ? AppColors.darkBackground
+            : AppColors.background,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Wishlist',
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+            color: isDark ? Colors.white : AppColors.textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            letterSpacing: -0.3,
           ),
         ),
       ),
@@ -68,6 +73,8 @@ class _WishlistTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
@@ -78,9 +85,18 @@ class _WishlistTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? AppColors.darkCard : Colors.white,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -88,7 +104,9 @@ class _WishlistTile extends StatelessWidget {
               width: 76,
               height: 76,
               decoration: BoxDecoration(
-                color: product.cardBackground,
+                color: isDark
+                    ? const Color(0xFF0F172A)
+                    : product.cardBackground,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: ClipRRect(
@@ -119,18 +137,20 @@ class _WishlistTile extends StatelessWidget {
                     product.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: isDark ? Colors.white : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     product.category,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.textMuted,
+                      color: isDark
+                          ? AppColors.darkTextMuted
+                          : AppColors.textMuted,
                     ),
                   ),
                   const SizedBox(height: 8),

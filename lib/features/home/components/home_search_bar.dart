@@ -18,8 +18,10 @@ class HomeSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
       child: Row(
         children: [
           // Search Field
@@ -27,26 +29,39 @@ class HomeSearchBar extends StatelessWidget {
             child: Container(
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.homeSurface,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                color: isDark ? AppColors.darkSurface : const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: isDark
+                      ? AppColors.darkBorder
+                      : const Color(0xFFE2E8F0),
+                  width: 1,
+                ),
               ),
               child: TextField(
                 controller: controller,
                 onChanged: onChanged,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.textPrimary,
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
+                  fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: const TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 14,
+                  hintStyle: TextStyle(
+                    color: isDark
+                        ? AppColors.darkTextMuted
+                        : const Color(0xFF94A3B8),
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w400,
                   ),
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     Icons.search_rounded,
-                    color: AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : const Color(0xFF64748B),
                     size: 20,
                   ),
                   border: InputBorder.none,
@@ -58,22 +73,22 @@ class HomeSearchBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
 
           // Filter Button
           InkWell(
             onTap: onFilterTap ?? () {},
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
             child: Container(
               width: 48,
               height: 48,
               decoration: BoxDecoration(
                 color: AppColors.primary,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(14),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.25),
-                    blurRadius: 8,
+                    color: AppColors.primary.withValues(alpha: 0.28),
+                    blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),
                 ],

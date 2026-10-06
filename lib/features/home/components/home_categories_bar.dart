@@ -17,6 +17,8 @@ class HomeCategoriesBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return SizedBox(
       height: 42,
       child: ListView.separated(
@@ -30,42 +32,57 @@ class HomeCategoriesBar extends StatelessWidget {
 
           return InkWell(
             onTap: () => onSelectCategory(cat.id),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : AppColors.homeSurface,
-                borderRadius: BorderRadius.circular(14),
+                color: isSelected
+                    ? AppColors.primary
+                    : (isDark ? AppColors.darkSurface : Colors.white),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.border,
+                  color: isSelected
+                      ? AppColors.primary
+                      : (isDark
+                            ? AppColors.darkBorder
+                            : const Color(0xFFE2E8F0)),
+                  width: 1,
                 ),
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.25),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
-                    : null,
+                boxShadow: [
+                  BoxShadow(
+                    color: isSelected
+                        ? AppColors.primary.withValues(alpha: 0.25)
+                        : Colors.black.withValues(alpha: isDark ? 0.2 : 0.02),
+                    blurRadius: isSelected ? 8 : 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
                   Icon(
                     cat.icon,
                     size: 16,
-                    color: isSelected ? Colors.white : AppColors.textSecondary,
+                    color: isSelected
+                        ? Colors.white
+                        : (isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.textSecondary),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 7),
                   Text(
                     cat.title,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: isSelected
-                          ? FontWeight.bold
+                          ? FontWeight.w700
                           : FontWeight.w500,
-                      color: isSelected ? Colors.white : AppColors.textPrimary,
+                      color: isSelected
+                          ? Colors.white
+                          : (isDark
+                                ? AppColors.darkTextPrimary
+                                : AppColors.textPrimary),
                     ),
                   ),
                 ],

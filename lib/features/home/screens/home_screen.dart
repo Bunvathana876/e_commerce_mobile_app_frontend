@@ -413,11 +413,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppColors.homePrimaryLight,
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: AppColors.primary.withValues(alpha: 0.3),
+                          gradient: LinearGradient(
+                            colors: isDark
+                                ? const [Color(0xFF1E293B), Color(0xFF0F172A)]
+                                : const [Color(0xFF1E3A8A), Color(0xFF2563EB)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(
+                              alpha: isDark ? 0.4 : 0.25,
+                            ),
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(
+                                alpha: isDark ? 0.2 : 0.18,
+                              ),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: Row(
                           children: [
@@ -425,12 +443,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 44,
                               height: 44,
                               decoration: BoxDecoration(
-                                color: AppColors.primary,
+                                color: Colors.white.withValues(alpha: 0.18),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
                                 Icons.bolt_rounded,
-                                color: Colors.white,
+                                color: Color(0xFFFBBF24),
                                 size: 26,
                               ),
                             ),
@@ -446,7 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary,
+                                      color: Colors.white,
                                     ),
                                   ),
                                   SizedBox(height: 2),
@@ -456,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: AppColors.textSecondary,
+                                      color: Colors.white70,
                                     ),
                                   ),
                                 ],
@@ -465,12 +483,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             const _CountdownBox(text: '02'),
                             const Text(
                               ' : ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                             const _CountdownBox(text: '45'),
                             const Text(
                               ' : ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                             const _CountdownBox(text: '12'),
                           ],
@@ -691,17 +715,22 @@ class _CountdownBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: Colors.white.withValues(alpha: 0.22),
         borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.35),
+          width: 0.8,
+        ),
       ),
       child: Text(
         text,
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
+          fontSize: 11.5,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.5,
         ),
       ),
     );
@@ -722,6 +751,8 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -729,24 +760,35 @@ class _SectionTitle extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w800,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+              letterSpacing: -0.2,
             ),
           ),
           InkWell(
             onTap: onActionTap,
             borderRadius: BorderRadius.circular(8),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              child: Text(
-                actionText,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              child: Row(
+                children: [
+                  Text(
+                    actionText,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    size: 16,
+                    color: AppColors.primary,
+                  ),
+                ],
               ),
             ),
           ),

@@ -25,6 +25,8 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       child: Row(
@@ -38,9 +40,16 @@ class HomeHeader extends StatelessWidget {
               height: 44,
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
-                color: AppColors.homePrimaryLight,
+                color: isDark
+                    ? AppColors.darkSurface
+                    : AppColors.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primary, width: 1.5),
+                border: Border.all(
+                  color: AppColors.primary.withValues(
+                    alpha: isDark ? 0.4 : 0.25,
+                  ),
+                  width: 1.5,
+                ),
               ),
               child: ClipOval(
                 child: Image.asset(
@@ -66,34 +75,52 @@ class HomeHeader extends StatelessWidget {
                   'Welcome, $userName 👋',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondary,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
+                    letterSpacing: 0.2,
                   ),
                 ),
                 const SizedBox(height: 2),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_rounded,
-                      size: 14,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
-                        location,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                InkWell(
+                  onTap: onProfileTap,
+                  borderRadius: BorderRadius.circular(6),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.location_on_rounded,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          location,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w700,
+                            color: isDark
+                                ? AppColors.darkTextPrimary
+                                : AppColors.textPrimary,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 2),
+                      Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 16,
+                        color: isDark
+                            ? AppColors.darkTextMuted
+                            : AppColors.textMuted,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -104,6 +131,7 @@ class HomeHeader extends StatelessWidget {
             icon: Icons.notifications_none_rounded,
             badgeCount: unreadNotifications,
             onTap: onNotificationTap ?? () {},
+            isDark: isDark,
           ),
           const SizedBox(width: 8),
 
@@ -112,6 +140,7 @@ class HomeHeader extends StatelessWidget {
             icon: Icons.shopping_bag_outlined,
             badgeCount: cartItemCount,
             onTap: onCartTap ?? () {},
+            isDark: isDark,
           ),
         ],
       ),
@@ -123,11 +152,13 @@ class _HeaderIconButton extends StatelessWidget {
   final IconData icon;
   final int badgeCount;
   final VoidCallback onTap;
+  final bool isDark;
 
   const _HeaderIconButton({
     required this.icon,
     required this.badgeCount,
     required this.onTap,
+    this.isDark = false,
   });
 
   @override
@@ -139,13 +170,16 @@ class _HeaderIconButton extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? AppColors.darkSurface : Colors.white,
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.border),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+              width: 1,
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
-                blurRadius: 6,
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.03),
+                blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
             ],
@@ -155,7 +189,13 @@ class _HeaderIconButton extends StatelessWidget {
             child: InkWell(
               customBorder: const CircleBorder(),
               onTap: onTap,
-              child: Icon(icon, color: AppColors.textPrimary, size: 20),
+              child: Icon(
+                icon,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                size: 20,
+              ),
             ),
           ),
         ),
@@ -165,9 +205,13 @@ class _HeaderIconButton extends StatelessWidget {
             right: -2,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.primary,
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: isDark ? AppColors.darkBackground : Colors.white,
+                  width: 1.5,
+                ),
               ),
               child: Text(
                 '$badgeCount',

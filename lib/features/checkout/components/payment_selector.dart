@@ -72,6 +72,8 @@ class _PaymentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -80,12 +82,25 @@ class _PaymentTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: selected ? AppColors.homePrimaryLight : Colors.white,
+          color: selected
+              ? (isDark
+                    ? AppColors.primary.withValues(alpha: 0.15)
+                    : AppColors.homePrimaryLight)
+              : (isDark ? AppColors.darkCard : Colors.white),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: selected ? AppColors.homePrimary : AppColors.border,
+            color: selected
+                ? AppColors.homePrimary
+                : (isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0)),
             width: selected ? 1.6 : 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -97,16 +112,18 @@ class _PaymentTile extends StatelessWidget {
                 children: [
                   Text(
                     option.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: isDark ? Colors.white : AppColors.textPrimary,
                     ),
                   ),
                   Text(
                     option.subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.textSecondary,
+                      color: isDark
+                          ? AppColors.darkTextSecondary
+                          : AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -114,7 +131,9 @@ class _PaymentTile extends StatelessWidget {
             ),
             Icon(
               selected ? Icons.check_circle_rounded : Icons.circle_outlined,
-              color: selected ? AppColors.homePrimary : AppColors.textMuted,
+              color: selected
+                  ? AppColors.homePrimary
+                  : (isDark ? AppColors.darkTextMuted : AppColors.textMuted),
             ),
           ],
         ),

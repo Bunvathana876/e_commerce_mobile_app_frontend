@@ -22,7 +22,7 @@ class CategoryGridCard extends StatelessWidget {
         color: isDark ? AppColors.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.border,
+          color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
           width: 1,
         ),
         boxShadow: [
@@ -116,7 +116,7 @@ class CategoryGridCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isDark
                             ? AppColors.darkSurface
-                            : AppColors.homeSurface,
+                            : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(

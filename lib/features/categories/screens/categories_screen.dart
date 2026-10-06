@@ -264,10 +264,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     decoration: BoxDecoration(
                       color: isDark
                           ? AppColors.darkSurface
-                          : AppColors.homeSurface,
+                          : const Color(0xFFF1F5F9),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: isDark ? AppColors.darkBorder : AppColors.border,
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : const Color(0xFFE2E8F0),
                       ),
                     ),
                     child: TextField(
@@ -320,10 +322,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     decoration: BoxDecoration(
                       color: isDark
                           ? AppColors.darkSurface
-                          : AppColors.homeSurface,
+                          : const Color(0xFFF1F5F9),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isDark ? AppColors.darkBorder : AppColors.border,
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : const Color(0xFFE2E8F0),
                       ),
                     ),
                     child: Row(
@@ -449,7 +453,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             color: isDark ? AppColors.darkSurface : const Color(0xFFF8FAFC),
             border: Border(
               right: BorderSide(
-                color: isDark ? AppColors.darkBorder : AppColors.border,
+                color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
                 width: 1,
               ),
             ),
@@ -498,7 +502,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               ? cat.accentColor.withValues(alpha: 0.15)
                               : (isDark
                                     ? AppColors.darkBackground
-                                    : const Color(0xFFEDF2F7)),
+                                    : const Color(0xFFF1F5F9)),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -666,7 +670,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                   ? currentCat.accentColor
                                   : (isDark
                                         ? AppColors.darkBorder
-                                        : AppColors.border),
+                                        : const Color(0xFFE2E8F0)),
                             ),
                           ),
                           child: Text(
@@ -718,8 +722,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     decoration: BoxDecoration(
                       color: isDark
                           ? AppColors.darkSurface
-                          : AppColors.homeSurface,
+                          : const Color(0xFFF1F5F9),
                       borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : const Color(0xFFE2E8F0),
+                        width: 0.8,
+                      ),
                     ),
                     child: Text(
                       '${products.length} items',
@@ -809,6 +819,11 @@ class _ViewTabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final unselectedColor = isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.textSecondary;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -832,7 +847,7 @@ class _ViewTabButton extends StatelessWidget {
             Icon(
               icon,
               size: 17,
-              color: isSelected ? Colors.white : AppColors.textSecondary,
+              color: isSelected ? Colors.white : unselectedColor,
             ),
             const SizedBox(width: 6),
             Flexible(
@@ -843,7 +858,7 @@ class _ViewTabButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  color: isSelected ? Colors.white : AppColors.textSecondary,
+                  color: isSelected ? Colors.white : unselectedColor,
                 ),
               ),
             ),

@@ -73,8 +73,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       body: Column(
         children: [
           Expanded(
@@ -83,7 +85,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 SliverAppBar(
                   pinned: true,
                   expandedHeight: 300,
-                  backgroundColor: _product.cardBackground,
+                  backgroundColor: isDark
+                      ? const Color(0xFF0F172A)
+                      : _product.cardBackground,
                   surfaceTintColor: Colors.transparent,
                   leading: _RoundIconButton(
                     icon: LucideIcons.arrowLeft,
@@ -147,6 +151,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildDetails() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
       child: Column(
@@ -161,13 +167,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.homePrimaryLight,
+                  color: isDark
+                      ? AppColors.primary.withValues(alpha: 0.15)
+                      : AppColors.homePrimaryLight,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   _product.category,
-                  style: const TextStyle(
-                    color: AppColors.homePrimary,
+                  style: TextStyle(
+                    color: isDark
+                        ? AppColors.primaryLight
+                        : AppColors.homePrimary,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -182,10 +192,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               const SizedBox(width: 4),
               Text(
                 '${_product.rating.toStringAsFixed(1)} (${_product.reviewsCount} reviews)',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
                 ),
               ),
             ],
@@ -195,10 +207,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           // Product Title
           Text(
             _product.name,
-            style: const TextStyle(
-              fontSize: 24,
+            style: TextStyle(
+              fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: isDark ? Colors.white : AppColors.textPrimary,
+              height: 1.25,
             ),
           ),
           const SizedBox(height: 10),
@@ -221,9 +234,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
                     formatPrice(_product.originalPrice!),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
-                      color: AppColors.textMuted,
+                      color: isDark
+                          ? AppColors.darkTextMuted
+                          : AppColors.textMuted,
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),
@@ -247,12 +262,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           const SizedBox(height: 20),
 
           // Color selector
-          const Text(
+          Text(
             'Select Color',
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: isDark ? Colors.white : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
@@ -282,7 +297,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
+                          color: Colors.black.withValues(alpha: 0.15),
                           blurRadius: 4,
                         ),
                       ],
@@ -304,12 +319,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           const SizedBox(height: 18),
 
           // Size selector
-          const Text(
+          Text(
             'Select Size',
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: isDark ? Colors.white : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
@@ -326,12 +341,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.homePrimary : Colors.white,
+                    color: isSelected
+                        ? AppColors.homePrimary
+                        : (isDark ? AppColors.darkCard : Colors.white),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected
                           ? AppColors.homePrimary
-                          : AppColors.border,
+                          : (isDark
+                                ? AppColors.darkBorder
+                                : const Color(0xFFE2E8F0)),
                     ),
                   ),
                   child: Text(
@@ -339,7 +358,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: isSelected ? Colors.white : AppColors.textPrimary,
+                      color: isSelected
+                          ? Colors.white
+                          : (isDark
+                                ? AppColors.darkTextPrimary
+                                : AppColors.textPrimary),
                     ),
                   ),
                 ),
@@ -349,12 +372,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           const SizedBox(height: 22),
 
           // Description
-          const Text(
+          Text(
             'Description',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: isDark ? Colors.white : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
@@ -363,10 +386,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             '${_product.category.toLowerCase()} collection. Comfortable, '
             'durable and designed to look great every day. Free delivery on '
             'orders over ${formatPrice(CartController.freeShippingFrom)}.',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               height: 1.55,
-              color: AppColors.textSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 20),
@@ -375,9 +400,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             decoration: BoxDecoration(
-              color: AppColors.homeSurface,
+              color: isDark ? AppColors.darkCard : const Color(0xFFF8FAFC),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.border),
+              border: Border.all(
+                color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+              ),
             ),
             child: const FittedBox(
               fit: BoxFit.scaleDown,
@@ -404,12 +431,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           // Quantity Stepper
           Row(
             children: [
-              const Text(
+              Text(
                 'Quantity',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDark ? Colors.white : AppColors.textPrimary,
                 ),
               ),
               const Spacer(),
@@ -423,7 +450,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ],
           ),
           const SizedBox(height: 28),
-          const Divider(color: AppColors.border),
+          Divider(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+          ),
           const SizedBox(height: 24),
 
           // Interactive Customer Reviews and Breakdown
@@ -513,7 +542,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             IconButton(
               tooltip: 'Buy Now',
               style: IconButton.styleFrom(
-                backgroundColor: AppColors.homePrimaryLight,
+                backgroundColor: isDark
+                    ? AppColors.primary.withValues(alpha: 0.15)
+                    : AppColors.homePrimaryLight,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -537,6 +568,8 @@ class _TrustItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -544,10 +577,10 @@ class _TrustItem extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11.5,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
+            color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
           ),
         ),
       ],
@@ -565,6 +598,8 @@ class _RoundIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(left: 12, top: 6, bottom: 6),
       child: InkWell(
@@ -573,11 +608,27 @@ class _RoundIconButton extends StatelessWidget {
         child: Container(
           width: 40,
           height: 40,
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: isDark
+                ? AppColors.darkCard.withValues(alpha: 0.9)
+                : Colors.white.withValues(alpha: 0.95),
             shape: BoxShape.circle,
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.06),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-          child: Icon(icon, size: 20, color: color ?? AppColors.textPrimary),
+          child: Icon(
+            icon,
+            size: 20,
+            color: color ?? (isDark ? Colors.white : AppColors.textPrimary),
+          ),
         ),
       ),
     );

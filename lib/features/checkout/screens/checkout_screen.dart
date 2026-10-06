@@ -71,22 +71,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final cart = CartController.instance;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: isDark
+            ? AppColors.darkBackground
+            : AppColors.background,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Checkout',
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+            color: isDark ? Colors.white : AppColors.textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            letterSpacing: -0.3,
           ),
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(
+          color: isDark ? Colors.white : AppColors.textPrimary,
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -131,9 +138,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.homeSurface,
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(
+                  color: isDark
+                      ? AppColors.darkBorder
+                      : const Color(0xFFE2E8F0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -147,22 +165,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               '${item.quantity} × ${item.product.name}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: AppColors.textSecondary,
+                              style: TextStyle(
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.textSecondary,
                               ),
                             ),
                           ),
                           Text(
                             formatPrice(item.total),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: isDark
+                                  ? Colors.white
+                                  : AppColors.textPrimary,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  const Divider(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Divider(
+                      height: 1,
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : const Color(0xFFE2E8F0),
+                    ),
+                  ),
                   _TotalRow('Subtotal', formatPrice(cart.subtotal)),
                   const SizedBox(height: 6),
                   _TotalRow(
@@ -206,14 +236,16 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12, top: 4),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 17,
+        style: TextStyle(
+          fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: AppColors.textPrimary,
+          color: isDark ? Colors.white : AppColors.textPrimary,
         ),
       ),
     );
@@ -239,6 +271,8 @@ class _Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: TextFormField(
@@ -246,16 +280,35 @@ class _Field extends StatelessWidget {
         keyboardType: keyboardType,
         maxLines: maxLines,
         validator: validator,
+        style: TextStyle(
+          color: isDark ? Colors.white : AppColors.textPrimary,
+          fontSize: 14,
+        ),
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: Icon(icon, size: 20),
+          labelStyle: TextStyle(
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.textSecondary,
+          ),
+          prefixIcon: Icon(
+            icon,
+            size: 20,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.textSecondary,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: AppColors.border),
+            borderSide: BorderSide(
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: AppColors.border),
+            borderSide: BorderSide(
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -279,10 +332,14 @@ class _TotalRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final style = TextStyle(
       fontSize: bold ? 17 : 14,
       fontWeight: bold ? FontWeight.bold : FontWeight.w500,
-      color: bold ? AppColors.homePrimary : AppColors.textSecondary,
+      color: bold
+          ? AppColors.homePrimary
+          : (isDark ? AppColors.darkTextSecondary : AppColors.textSecondary),
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -301,8 +358,16 @@ class _SuccessDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      backgroundColor: isDark ? AppColors.darkCard : Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: BorderSide(
+          color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -311,8 +376,10 @@ class _SuccessDialog extends StatelessWidget {
             Container(
               width: 80,
               height: 80,
-              decoration: const BoxDecoration(
-                color: AppColors.homePrimaryLight,
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.primary.withValues(alpha: 0.15)
+                    : AppColors.homePrimaryLight,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -322,15 +389,23 @@ class _SuccessDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
-            const Text(
+            Text(
               'Order placed!',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : AppColors.textPrimary,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               'Thank you! Your order $orderId is being prepared.',
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.textSecondary),
+              style: TextStyle(
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
+              ),
             ),
             const SizedBox(height: 22),
             ElevatedButton(
@@ -348,7 +423,14 @@ class _SuccessDialog extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Continue shopping'),
+              child: Text(
+                'Continue shopping',
+                style: TextStyle(
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
+                ),
+              ),
             ),
           ],
         ),

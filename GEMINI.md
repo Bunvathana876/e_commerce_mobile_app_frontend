@@ -93,6 +93,13 @@
     - **Typography & Readability**: Enlarged fonts across department cards (`16.5` title, `12.5` subtitle, `11.5` counts, `11` preview tags), search bar (`14.5` text), sidebar rail, and hero banners. Added a cheerful smile icon (`Icons.sentiment_satisfied_alt_rounded`) to the category header.
     - **Layout Overflow Hardening**: Wrapped "Explore Departments" header row in `Expanded` with ellipsis and ensured `110px` bottom scroll padding across both grid and explorer modes.
     - **Verification**: 0 analyzer errors, 63/63 passing tests.
+21. UI/UX Modernization & Tier-1 Commercial Polish (Anti-AI Styling):
+    - **Header & Search**: Replaced boxy saturated containers with slate neutral surfaces (`Color(0xFFF1F5F9)` light / `AppColors.darkSurface` dark), hairline borders (`Color(0xFFE2E8F0)` / `AppColors.darkBorder`), drop-down delivery chips, and refined circular actions.
+    - **Cards & Catalogs**: Studio image tints (`Color(0xFFF8FAFC)` light / `Color(0xFF0F172A)` dark), 10px soft ambient shadows, uppercase category badge typography, and sleek circular Add-to-Cart buttons.
+    - **Flash Sale & Deals**: High-end commercial midnight gradient card (`#1E3A8A` to `#2563EB`) with gold bolt icon, frosted countdown timeboxes, and glowing filter chips.
+    - **Cart & Checkout**: Full dark/light adaptivity, hairline separators, tabular figures for price calculations, and modern payment selector cards.
+    - **Categories Screen**: Polished search input, segmented view switcher, category rail navigation, and subcategory filter pills.
+    - **Verification**: 0 analyzer issues, 63/63 passing tests.
 
 ## 3. Folder structure (feature-first)
 

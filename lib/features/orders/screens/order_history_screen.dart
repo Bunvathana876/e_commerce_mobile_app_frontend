@@ -22,19 +22,24 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = OrdersController.instance;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: isDark
+            ? AppColors.darkBackground
+            : AppColors.background,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'My Orders',
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+            color: isDark ? Colors.white : AppColors.textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            letterSpacing: -0.3,
           ),
         ),
       ),
@@ -91,17 +96,21 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               LucideIcons.packageX,
                               size: 44,
-                              color: AppColors.textMuted,
+                              color: isDark
+                                  ? AppColors.darkTextMuted
+                                  : AppColors.textMuted,
                             ),
                             const SizedBox(height: 10),
                             Text(
                               'No ${_selectedStatus?.label.toLowerCase()} orders',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
-                                color: AppColors.textSecondary,
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.textSecondary,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -137,24 +146,43 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.homePrimary : Colors.white,
+          color: isSelected
+              ? AppColors.homePrimary
+              : (isDark ? AppColors.darkCard : Colors.white),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.homePrimary : AppColors.border,
+            color: isSelected
+                ? AppColors.homePrimary
+                : (isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0)),
           ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.25),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 12.5,
-            fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : AppColors.textSecondary,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected
+                ? Colors.white
+                : (isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textSecondary),
           ),
         ),
       ),

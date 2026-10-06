@@ -472,17 +472,25 @@ class _TimeBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Text(
         value,
         style: const TextStyle(
-          color: Color(0xFFB91C1C),
+          color: Color(0xFFDC2626),
           fontSize: 13,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w800,
+          fontFeatures: [FontFeature.tabularFigures()],
         ),
       ),
     );
@@ -518,14 +526,23 @@ class _FilterChip extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? AppColors.primary
-                : (isDark ? AppColors.darkBorder : AppColors.border),
+                : (isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0)),
           ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ]
+              : null,
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 13,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
             color: isSelected
                 ? Colors.white
                 : (isDark ? AppColors.darkTextPrimary : AppColors.textPrimary),
@@ -558,13 +575,13 @@ class _DealCard extends StatelessWidget {
         color: isDark ? AppColors.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.border,
+          color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.04),
+            color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.04),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -582,10 +599,10 @@ class _DealCard extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: isDark
-                          ? const Color(0xFF263238)
+                          ? const Color(0xFF0F172A)
                           : product.cardBackground,
                       borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(18),
+                        top: Radius.circular(17),
                       ),
                     ),
                     child: Center(

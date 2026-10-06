@@ -75,45 +75,77 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final cart = CartController.instance;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: isDark
+            ? AppColors.darkBackground
+            : AppColors.background,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'My Cart',
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+            color: isDark ? Colors.white : AppColors.textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            letterSpacing: -0.3,
           ),
         ),
         actions: [
           if (!cart.isEmpty)
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 LucideIcons.trash2,
-                size: 20,
-                color: AppColors.textSecondary,
+                size: 19,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
               ),
               tooltip: 'Clear Cart',
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
+                    backgroundColor: isDark ? AppColors.darkCard : Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
+                      side: BorderSide(
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : const Color(0xFFE2E8F0),
+                      ),
                     ),
-                    title: const Text('Clear Cart?'),
-                    content: const Text(
+                    title: Text(
+                      'Clear Cart?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: isDark ? Colors.white : AppColors.textPrimary,
+                      ),
+                    ),
+                    content: Text(
                       'Are you sure you want to remove all items from your cart?',
+                      style: TextStyle(
+                        color: isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.textSecondary,
+                      ),
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(ctx).pop(),
-                        child: const Text('Cancel'),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -123,7 +155,10 @@ class _CartScreenState extends State<CartScreen> {
                         },
                         child: const Text(
                           'Clear All',
-                          style: TextStyle(color: AppColors.error),
+                          style: TextStyle(
+                            color: AppColors.error,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ],
@@ -191,17 +226,23 @@ class _CartScreenState extends State<CartScreen> {
     CartController cart,
     double effectiveTotal,
   ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkCard : Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border.all(color: AppColors.border),
+        border: Border(
+          top: BorderSide(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+          ),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, -3),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, -4),
           ),
         ],
       ),
@@ -214,9 +255,13 @@ class _CartScreenState extends State<CartScreen> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: AppColors.homeSurface,
+                color: isDark ? AppColors.darkSurface : const Color(0xFFF1F5F9),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(
+                  color: isDark
+                      ? AppColors.darkBorder
+                      : const Color(0xFFE2E8F0),
+                ),
               ),
               child: Row(
                 children: [
@@ -230,19 +275,22 @@ class _CartScreenState extends State<CartScreen> {
                     child: TextField(
                       controller: _promoController,
                       textCapitalization: TextCapitalization.characters,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
+                        color: isDark ? Colors.white : AppColors.textPrimary,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Promo code (try PANDA10)',
                         hintStyle: TextStyle(
                           fontSize: 12,
-                          color: AppColors.textMuted,
+                          color: isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.textMuted,
                         ),
                         border: InputBorder.none,
                         isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 8),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 8),
                       ),
                       onSubmitted: (_) => _applyPromo(),
                     ),
@@ -273,10 +321,12 @@ class _CartScreenState extends State<CartScreen> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: const Color(0xFFEFF6FF),
+                color: isDark
+                    ? AppColors.primary.withValues(alpha: 0.15)
+                    : const Color(0xFFEFF6FF),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.3),
+                  color: AppColors.primary.withValues(alpha: 0.35),
                 ),
               ),
               child: Row(
@@ -299,10 +349,12 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   InkWell(
                     onTap: _removePromo,
-                    child: const Icon(
+                    child: Icon(
                       Icons.close_rounded,
                       size: 18,
-                      color: AppColors.textMuted,
+                      color: isDark
+                          ? AppColors.darkTextSecondary
+                          : AppColors.textMuted,
                     ),
                   ),
                 ],
@@ -323,9 +375,12 @@ class _CartScreenState extends State<CartScreen> {
               isDiscount: true,
             ),
           ],
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Divider(height: 1),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Divider(
+              height: 1,
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+            ),
           ),
           _SummaryRow(
             label: 'Total',
@@ -367,17 +422,26 @@ class _FreeShippingBanner extends StatelessWidget {
     final isFree = subtotal >= freeThreshold;
     final progress = (subtotal / freeThreshold).clamp(0.0, 1.0);
     final remaining = freeThreshold - subtotal;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 6, 20, 6),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: isFree ? const Color(0xFFF0FDF4) : AppColors.homePrimaryLight,
+        color: isFree
+            ? (isDark
+                  ? const Color(0xFF064E3B).withValues(alpha: 0.4)
+                  : const Color(0xFFF0FDF4))
+            : (isDark ? AppColors.darkCard : AppColors.homePrimaryLight),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isFree
-              ? const Color(0xFF86EFAC)
-              : AppColors.primary.withValues(alpha: 0.2),
+              ? (isDark
+                    ? const Color(0xFF059669).withValues(alpha: 0.4)
+                    : const Color(0xFF86EFAC))
+              : (isDark
+                    ? AppColors.darkBorder
+                    : AppColors.primary.withValues(alpha: 0.15)),
         ),
       ),
       child: Column(
@@ -390,7 +454,7 @@ class _FreeShippingBanner extends StatelessWidget {
                     ? Icons.check_circle_rounded
                     : Icons.local_shipping_rounded,
                 size: 18,
-                color: isFree ? const Color(0xFF16A34A) : AppColors.primary,
+                color: isFree ? const Color(0xFF22C55E) : AppColors.primary,
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -402,8 +466,10 @@ class _FreeShippingBanner extends StatelessWidget {
                     fontSize: 12.5,
                     fontWeight: FontWeight.w600,
                     color: isFree
-                        ? const Color(0xFF15803D)
-                        : AppColors.homePrimaryDark,
+                        ? (isDark
+                              ? const Color(0xFF86EFAC)
+                              : const Color(0xFF15803D))
+                        : (isDark ? Colors.white : AppColors.homePrimaryDark),
                   ),
                 ),
               ),
@@ -415,7 +481,7 @@ class _FreeShippingBanner extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 5,
-              backgroundColor: Colors.white,
+              backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(
                 isFree ? const Color(0xFF22C55E) : AppColors.primary,
               ),
@@ -442,12 +508,17 @@ class _SummaryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final style = TextStyle(
       fontSize: bold ? 17 : 14,
       fontWeight: bold ? FontWeight.bold : FontWeight.w500,
       color: bold
-          ? AppColors.textPrimary
-          : (isDiscount ? const Color(0xFF16A34A) : AppColors.textSecondary),
+          ? (isDark ? Colors.white : AppColors.textPrimary)
+          : (isDiscount
+                ? const Color(0xFF16A34A)
+                : (isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary)),
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

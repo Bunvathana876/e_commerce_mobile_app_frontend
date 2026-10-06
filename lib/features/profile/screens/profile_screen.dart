@@ -79,6 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showEditProfile(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final user = SessionStorage.currentUser;
     final nameController = TextEditingController(
       text: user?.name ?? 'Alex Doe',
@@ -90,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -108,12 +109,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Edit Profile',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDark ? Colors.white : AppColors.textPrimary,
                   ),
                 ),
                 IconButton(
@@ -185,9 +186,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showShippingAddressSheet(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -200,12 +203,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Shipping Addresses',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDark ? Colors.white : AppColors.textPrimary,
                   ),
                 ),
                 IconButton(
@@ -215,14 +218,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             const SizedBox(height: 12),
-            _AddressCard(
+            const _AddressCard(
               title: 'Home (Default)',
               address: 'Street 2004, Toul Kork, Phnom Penh, Cambodia',
               phone: '+855 12 345 678',
               isDefault: true,
             ),
             const SizedBox(height: 10),
-            _AddressCard(
+            const _AddressCard(
               title: 'Work / Office',
               address: 'Canadia Tower, Monivong Blvd, Phnom Penh, Cambodia',
               phone: '+855 98 765 432',
@@ -252,9 +255,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showPaymentMethodsSheet(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -267,12 +272,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Payment Methods',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDark ? Colors.white : AppColors.textPrimary,
                   ),
                 ),
                 IconButton(
@@ -282,21 +287,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             const SizedBox(height: 12),
-            _PaymentCardItem(
+            const _PaymentCardItem(
               title: 'Visa Credit Card',
               detail: '•••• •••• •••• 4242',
               icon: Icons.credit_card_rounded,
               isDefault: true,
             ),
             const SizedBox(height: 10),
-            _PaymentCardItem(
+            const _PaymentCardItem(
               title: 'ABA Pay / KHQR',
               detail: 'Instant QR payment in Cambodia',
               icon: Icons.qr_code_scanner_rounded,
               isDefault: false,
             ),
             const SizedBox(height: 10),
-            _PaymentCardItem(
+            const _PaymentCardItem(
               title: 'Cash on Delivery',
               detail: 'Pay upon receiving your package',
               icon: Icons.local_atm_rounded,
@@ -328,9 +333,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showNotificationsSheet(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -345,12 +352,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Notification Preferences',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: isDark ? Colors.white : AppColors.textPrimary,
                       ),
                     ),
                     IconButton(
@@ -404,9 +411,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showHelpSupportSheet(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -424,12 +433,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Help & Support 🐼',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: isDark ? Colors.white : AppColors.textPrimary,
                     ),
                   ),
                   IconButton(
@@ -607,9 +616,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(
+                  color: isDark
+                      ? AppColors.darkBorder
+                      : const Color(0xFFE2E8F0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -635,7 +655,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 44,
                             height: 44,
                             decoration: BoxDecoration(
-                              color: AppColors.homePrimaryLight,
+                              color: isDark
+                                  ? AppColors.primary.withValues(alpha: 0.15)
+                                  : AppColors.homePrimaryLight,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Icon(
@@ -647,9 +669,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(height: 8),
                           Text(
                             status.label,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textPrimary,
+                              color: isDark
+                                  ? AppColors.darkTextPrimary
+                                  : AppColors.textPrimary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -665,9 +689,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Main menu list
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(
+                  color: isDark
+                      ? AppColors.darkBorder
+                      : const Color(0xFFE2E8F0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -681,7 +716,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: AppColors.homePrimaryLight,
+                          color: isDark
+                              ? AppColors.primary.withValues(alpha: 0.15)
+                              : AppColors.homePrimaryLight,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
@@ -692,10 +729,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       title: Text(
                         _menuItems[i].title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: isDark
+                              ? AppColors.darkTextPrimary
+                              : AppColors.textPrimary,
                         ),
                       ),
                       trailing: Row(
@@ -706,23 +745,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: Text(
                                 _menuItems[i].badge!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 12,
-                                  color: AppColors.textMuted,
+                                  color: isDark
+                                      ? AppColors.darkTextMuted
+                                      : AppColors.textMuted,
                                 ),
                               ),
                             ),
-                          const Icon(
+                          Icon(
                             Icons.chevron_right_rounded,
                             size: 20,
-                            color: AppColors.textMuted,
+                            color: isDark
+                                ? AppColors.darkTextMuted
+                                : AppColors.textMuted,
                           ),
                         ],
                       ),
                       onTap: () => _onMenuTap(context, _menuItems[i]),
                     ),
                     if (i != _menuItems.length - 1)
-                      const Divider(height: 1, indent: 56, endIndent: 16),
+                      Divider(
+                        height: 1,
+                        indent: 56,
+                        endIndent: 16,
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : const Color(0xFFE2E8F0),
+                      ),
                   ],
                 ],
               ),
@@ -735,7 +785,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isDark ? AppColors.darkBorder : AppColors.border,
+                  color: isDark
+                      ? AppColors.darkBorder
+                      : const Color(0xFFE2E8F0),
                 ),
               ),
               child: SwitchListTile.adaptive(
@@ -747,7 +799,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: AppColors.homePrimaryLight,
+                    color: isDark
+                        ? AppColors.primary.withValues(alpha: 0.15)
+                        : AppColors.homePrimaryLight,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
@@ -842,13 +896,21 @@ class _AddressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDefault ? AppColors.homePrimaryLight : AppColors.homeSurface,
+        color: isDefault
+            ? (isDark
+                  ? AppColors.primary.withValues(alpha: 0.15)
+                  : AppColors.homePrimaryLight)
+            : (isDark ? AppColors.darkCard : const Color(0xFFF8FAFC)),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isDefault ? AppColors.primary : AppColors.border,
+          color: isDefault
+              ? AppColors.primary
+              : (isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0)),
         ),
       ),
       child: Row(
@@ -864,9 +926,10 @@ class _AddressCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
+                        color: isDark ? Colors.white : AppColors.textPrimary,
                       ),
                     ),
                     if (isDefault) ...[
@@ -895,17 +958,21 @@ class _AddressCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   address,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   phone,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textMuted,
+                    color: isDark
+                        ? AppColors.darkTextMuted
+                        : AppColors.textMuted,
                   ),
                 ),
               ],
@@ -932,13 +999,21 @@ class _PaymentCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDefault ? AppColors.homePrimaryLight : AppColors.homeSurface,
+        color: isDefault
+            ? (isDark
+                  ? AppColors.primary.withValues(alpha: 0.15)
+                  : AppColors.homePrimaryLight)
+            : (isDark ? AppColors.darkCard : const Color(0xFFF8FAFC)),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isDefault ? AppColors.primary : AppColors.border,
+          color: isDefault
+              ? AppColors.primary
+              : (isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0)),
         ),
       ),
       child: Row(
@@ -951,16 +1026,19 @@ class _PaymentCardItem extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13.5,
+                    color: isDark ? Colors.white : AppColors.textPrimary,
                   ),
                 ),
                 Text(
                   detail,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -986,6 +1064,8 @@ class _FaqItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -993,18 +1073,20 @@ class _FaqItem extends StatelessWidget {
         children: [
           Text(
             question,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 13.5,
-              color: AppColors.textPrimary,
+              color: isDark ? Colors.white : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 3),
           Text(
             answer,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12.5,
-              color: AppColors.textSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary,
               height: 1.4,
             ),
           ),

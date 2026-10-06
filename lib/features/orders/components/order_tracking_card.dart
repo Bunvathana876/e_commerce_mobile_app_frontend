@@ -30,16 +30,20 @@ class OrderTrackingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final names = order.items.map((i) => i.product.name).join(', ');
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.03),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -52,10 +56,10 @@ class OrderTrackingCard extends StatelessWidget {
             children: [
               Text(
                 order.id,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDark ? Colors.white : AppColors.textPrimary,
                 ),
               ),
               const Spacer(),
@@ -65,13 +69,17 @@ class OrderTrackingCard extends StatelessWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.homePrimaryLight,
+                  color: isDark
+                      ? AppColors.primary.withValues(alpha: 0.15)
+                      : AppColors.homePrimaryLight,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   order.status.label,
-                  style: const TextStyle(
-                    color: AppColors.homePrimary,
+                  style: TextStyle(
+                    color: isDark
+                        ? AppColors.primaryLight
+                        : AppColors.homePrimary,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
@@ -82,7 +90,10 @@ class OrderTrackingCard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             _dateText,
-            style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+            style: TextStyle(
+              fontSize: 12,
+              color: isDark ? AppColors.darkTextMuted : AppColors.textMuted,
+            ),
           ),
           const SizedBox(height: 14),
           _StatusProgress(current: order.status),
@@ -91,13 +102,21 @@ class OrderTrackingCard extends StatelessWidget {
             names,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               height: 1.4,
-              color: AppColors.textSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary,
             ),
           ),
-          const Divider(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Divider(
+              height: 1,
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+            ),
+          ),
           Row(
             children: [
               Expanded(
@@ -105,9 +124,11 @@ class OrderTrackingCard extends StatelessWidget {
                   '${order.itemCount} item${order.itemCount == 1 ? '' : 's'} • ${order.paymentMethod}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -137,6 +158,8 @@ class _StatusProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final steps = OrderStatus.values;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       children: [
         for (var i = 0; i < steps.length; i++) ...[
@@ -149,7 +172,9 @@ class _StatusProgress extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: i <= current.index
                         ? AppColors.homePrimary
-                        : AppColors.border,
+                        : (isDark
+                              ? AppColors.darkSurface
+                              : const Color(0xFFE2E8F0)),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),
@@ -162,8 +187,10 @@ class _StatusProgress extends StatelessWidget {
                         ? FontWeight.bold
                         : FontWeight.w500,
                     color: i <= current.index
-                        ? AppColors.textPrimary
-                        : AppColors.textMuted,
+                        ? (isDark ? Colors.white : AppColors.textPrimary)
+                        : (isDark
+                              ? AppColors.darkTextMuted
+                              : AppColors.textMuted),
                   ),
                 ),
               ],
