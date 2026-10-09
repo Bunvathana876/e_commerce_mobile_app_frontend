@@ -15,16 +15,20 @@ class SocialLoginButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _SocialCircleButton(
           onTap: onGoogleTap,
+          isDark: isDark,
           child: const _GoogleVectorLogo(size: 22),
         ),
         const SizedBox(width: 18),
         _SocialCircleButton(
           onTap: onFacebookTap,
+          isDark: isDark,
           child: const Icon(
             Icons.facebook,
             color: AppColors.facebook,
@@ -34,7 +38,12 @@ class SocialLoginButtons extends StatelessWidget {
         const SizedBox(width: 18),
         _SocialCircleButton(
           onTap: onAppleTap,
-          child: const Icon(Icons.apple, color: AppColors.apple, size: 28),
+          isDark: isDark,
+          child: Icon(
+            Icons.apple,
+            color: isDark ? Colors.white : AppColors.apple,
+            size: 28,
+          ),
         ),
       ],
     );
@@ -44,8 +53,13 @@ class SocialLoginButtons extends StatelessWidget {
 class _SocialCircleButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
+  final bool isDark;
 
-  const _SocialCircleButton({required this.child, this.onTap});
+  const _SocialCircleButton({
+    required this.child,
+    this.onTap,
+    this.isDark = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +67,15 @@ class _SocialCircleButton extends StatelessWidget {
       width: 52,
       height: 52,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.border, width: 1.2),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

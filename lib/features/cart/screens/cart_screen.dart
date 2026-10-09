@@ -80,20 +80,42 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: AppBar(
-        backgroundColor: isDark
-            ? AppColors.darkBackground
-            : AppColors.background,
+        backgroundColor: isDark ? AppColors.darkBackground : Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          'My Cart',
-          style: TextStyle(
-            color: isDark ? Colors.white : AppColors.textPrimary,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            letterSpacing: -0.3,
-          ),
+        centerTitle: false,
+        title: Row(
+          children: [
+            Text(
+              'My Cart',
+              style: TextStyle(
+                color: isDark ? Colors.white : AppColors.textPrimary,
+                fontWeight: FontWeight.w800,
+                fontSize: 20,
+                letterSpacing: -0.3,
+              ),
+            ),
+            if (!cart.isEmpty) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(
+                    alpha: isDark ? 0.2 : 0.1,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '${cart.totalCount} items',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
         actions: [
           if (!cart.isEmpty)
@@ -166,6 +188,7 @@ class _CartScreenState extends State<CartScreen> {
                 );
               },
             ),
+          const SizedBox(width: 8),
         ],
       ),
       body: ListenableBuilder(
@@ -240,177 +263,213 @@ class _CartScreenState extends State<CartScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Promo Code Row
-          if (!_promoApplied)
-            Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: isDark
-                      ? AppColors.darkBorder
-                      : const Color(0xFFE2E8F0),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Promo Code Input
+            if (!_promoApplied)
+              Container(
+                margin: const EdgeInsets.only(bottom: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 3,
                 ),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    LucideIcons.tag,
-                    size: 16,
-                    color: AppColors.primary,
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? AppColors.darkSurface
+                      : const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: isDark
+                        ? AppColors.darkBorder
+                        : const Color(0xFFE2E8F0),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: _promoController,
-                      textCapitalization: TextCapitalization.characters,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: isDark ? Colors.white : AppColors.textPrimary,
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      LucideIcons.tag,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        controller: _promoController,
+                        textCapitalization: TextCapitalization.characters,
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w700,
+                          color: isDark ? Colors.white : AppColors.textPrimary,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Promo code (try PANDA10)',
+                          hintStyle: TextStyle(
+                            fontSize: 12.5,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.textMuted,
+                          ),
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                        ),
+                        onSubmitted: (_) => _applyPromo(),
                       ),
-                      decoration: InputDecoration(
-                        hintText: 'Promo code (try PANDA10)',
-                        hintStyle: TextStyle(
-                          fontSize: 12,
+                    ),
+                    ElevatedButton(
+                      onPressed: _applyPromo,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Apply',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else
+              Container(
+                margin: const EdgeInsets.only(bottom: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(
+                    0xFF10B981,
+                  ).withValues(alpha: isDark ? 0.15 : 0.08),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: const Color(0xFF10B981).withValues(alpha: 0.35),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      size: 17,
+                      color: Color(0xFF10B981),
+                    ),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: Text(
+                        'PANDA10 (- \$10.00)',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF059669),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: _removePromo,
+                      borderRadius: BorderRadius.circular(14),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 18,
                           color: isDark
                               ? AppColors.darkTextSecondary
                               : AppColors.textMuted,
                         ),
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                      ),
-                      onSubmitted: (_) => _applyPromo(),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _applyPromo,
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: const Text(
-                      'Apply',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          else
-            Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? AppColors.primary.withValues(alpha: 0.15)
-                    : const Color(0xFFEFF6FF),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.35),
+                  ],
                 ),
               ),
-              child: Row(
+
+            // Financial Summary Rows
+            _SummaryRow(label: 'Subtotal', value: formatPrice(cart.subtotal)),
+            const SizedBox(height: 7),
+            _SummaryRow(
+              label: 'Shipping',
+              value: cart.shipping == 0 ? 'Free' : formatPrice(cart.shipping),
+              isDiscount: cart.shipping == 0,
+            ),
+            if (_promoApplied) ...[
+              const SizedBox(height: 7),
+              _SummaryRow(
+                label: 'Promo Discount',
+                value: '- ${formatPrice(_discountAmount)}',
+                isDiscount: true,
+              ),
+            ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Divider(
+                height: 1,
+                color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+              ),
+            ),
+            _SummaryRow(
+              label: 'Total',
+              value: formatPrice(effectiveTotal),
+              bold: true,
+            ),
+            const SizedBox(height: 16),
+
+            // Checkout Button
+            ElevatedButton(
+              onPressed: () => _openCheckout(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                minimumSize: const Size.fromHeight(54),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                  letterSpacing: -0.2,
+                ),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.check_circle_rounded,
-                    size: 16,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child: Text(
-                      'PANDA10 (- \$10.00)',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: _removePromo,
-                    child: Icon(
-                      Icons.close_rounded,
-                      size: 18,
-                      color: isDark
-                          ? AppColors.darkTextSecondary
-                          : AppColors.textMuted,
-                    ),
-                  ),
+                  Text('Checkout'),
+                  SizedBox(width: 8),
+                  Icon(LucideIcons.arrowRight, size: 18),
                 ],
               ),
             ),
-
-          _SummaryRow(label: 'Subtotal', value: formatPrice(cart.subtotal)),
-          const SizedBox(height: 6),
-          _SummaryRow(
-            label: 'Shipping',
-            value: cart.shipping == 0 ? 'Free' : formatPrice(cart.shipping),
-          ),
-          if (_promoApplied) ...[
-            const SizedBox(height: 6),
-            _SummaryRow(
-              label: 'Promo Discount',
-              value: '- ${formatPrice(_discountAmount)}',
-              isDiscount: true,
-            ),
           ],
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Divider(
-              height: 1,
-              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
-            ),
-          ),
-          _SummaryRow(
-            label: 'Total',
-            value: formatPrice(effectiveTotal),
-            bold: true,
-          ),
-          const SizedBox(height: 14),
-          ElevatedButton(
-            onPressed: () => _openCheckout(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.homePrimary,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              minimumSize: const Size.fromHeight(52),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            child: const Text('Checkout'),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
+/// Dynamic Free-Shipping progress banner clearly communicating progress & completion.
 class _FreeShippingBanner extends StatelessWidget {
   final double subtotal;
 
@@ -425,15 +484,17 @@ class _FreeShippingBanner extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 6, 20, 6),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: isFree
             ? (isDark
-                  ? const Color(0xFF064E3B).withValues(alpha: 0.4)
+                  ? const Color(0xFF064E3B).withValues(alpha: 0.35)
                   : const Color(0xFFF0FDF4))
-            : (isDark ? AppColors.darkCard : AppColors.homePrimaryLight),
-        borderRadius: BorderRadius.circular(14),
+            : (isDark
+                  ? AppColors.darkCard
+                  : AppColors.primary.withValues(alpha: 0.06)),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isFree
               ? (isDark
@@ -449,39 +510,67 @@ class _FreeShippingBanner extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                isFree
-                    ? Icons.check_circle_rounded
-                    : Icons.local_shipping_rounded,
-                size: 18,
-                color: isFree ? const Color(0xFF22C55E) : AppColors.primary,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: isFree
+                      ? const Color(0xFF22C55E).withValues(alpha: 0.15)
+                      : AppColors.primary.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
                   isFree
-                      ? 'Congratulations! You unlocked FREE shipping 🎉'
-                      : 'Add ${formatPrice(remaining)} more for FREE delivery',
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w600,
-                    color: isFree
-                        ? (isDark
-                              ? const Color(0xFF86EFAC)
-                              : const Color(0xFF15803D))
-                        : (isDark ? Colors.white : AppColors.homePrimaryDark),
-                  ),
+                      ? Icons.check_circle_rounded
+                      : Icons.local_shipping_rounded,
+                  size: 16,
+                  color: isFree ? const Color(0xFF22C55E) : AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isFree
+                          ? 'Congratulations! You unlocked FREE shipping 🎉'
+                          : 'Add ${formatPrice(remaining)} more for FREE delivery',
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
+                        color: isFree
+                            ? (isDark
+                                  ? const Color(0xFF86EFAC)
+                                  : const Color(0xFF15803D))
+                            : (isDark ? Colors.white : AppColors.textPrimary),
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Text(
+                      isFree
+                          ? 'Free standard shipping applied'
+                          : 'Order over ${formatPrice(freeThreshold)} qualifies',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isDark
+                            ? AppColors.darkTextMuted
+                            : AppColors.textMuted,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: progress,
-              minHeight: 5,
-              backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
+              minHeight: 6,
+              backgroundColor: isDark
+                  ? const Color(0xFF334155)
+                  : const Color(0xFFE2E8F0),
               valueColor: AlwaysStoppedAnimation<Color>(
                 isFree ? const Color(0xFF22C55E) : AppColors.primary,
               ),
@@ -510,8 +599,9 @@ class _SummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final style = TextStyle(
-      fontSize: bold ? 17 : 14,
-      fontWeight: bold ? FontWeight.bold : FontWeight.w500,
+      fontSize: bold ? 18 : 14,
+      fontWeight: bold ? FontWeight.w800 : FontWeight.w500,
+      fontFeatures: const [FontFeature.tabularFigures()],
       color: bold
           ? (isDark ? Colors.white : AppColors.textPrimary)
           : (isDiscount
@@ -520,6 +610,7 @@ class _SummaryRow extends StatelessWidget {
                       ? AppColors.darkTextSecondary
                       : AppColors.textSecondary)),
     );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -527,7 +618,11 @@ class _SummaryRow extends StatelessWidget {
         Text(
           value,
           style: bold
-              ? style.copyWith(color: AppColors.homePrimary)
+              ? style.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.3,
+                )
               : (isDiscount
                     ? style.copyWith(fontWeight: FontWeight.bold)
                     : style),

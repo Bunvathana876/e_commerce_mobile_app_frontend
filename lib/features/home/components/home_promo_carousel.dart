@@ -151,14 +151,36 @@ class _HomePromoCarouselState extends State<HomePromoCarousel> {
                                           borderRadius: BorderRadius.circular(
                                             10,
                                           ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withValues(
+                                                alpha: 0.1,
+                                              ),
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 1.5),
+                                            ),
+                                          ],
                                         ),
-                                        child: Text(
-                                          banner.buttonText,
-                                          style: TextStyle(
-                                            color: banner.gradientColors.first,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              banner.buttonText,
+                                              style: TextStyle(
+                                                color:
+                                                    banner.gradientColors.first,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Icon(
+                                              Icons.arrow_forward_rounded,
+                                              size: 13,
+                                              color:
+                                                  banner.gradientColors.first,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
@@ -209,23 +231,28 @@ class _HomePromoCarouselState extends State<HomePromoCarousel> {
         const SizedBox(height: 10),
 
         // Indicator Dots
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            widget.banners.length,
-            (index) => AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              width: _currentPage == index ? 20 : 6,
-              height: 6,
-              decoration: BoxDecoration(
-                color: _currentPage == index
-                    ? widget.banners[_currentPage].gradientColors.first
-                    : Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(3),
+        Builder(
+          builder: (context) {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                widget.banners.length,
+                (index) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  width: _currentPage == index ? 22 : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: _currentPage == index
+                        ? widget.banners[_currentPage].gradientColors.first
+                        : (isDark ? Colors.white24 : const Color(0xFFCBD5E1)),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );

@@ -42,14 +42,21 @@ class HomeHeader extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isDark
                     ? AppColors.darkSurface
-                    : AppColors.primary.withValues(alpha: 0.1),
+                    : AppColors.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: AppColors.primary.withValues(
-                    alpha: isDark ? 0.4 : 0.25,
+                    alpha: isDark ? 0.35 : 0.2,
                   ),
                   width: 1.5,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: ClipOval(
                 child: Image.asset(
@@ -76,55 +83,74 @@ class HomeHeader extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 12,
                     color: isDark
                         ? AppColors.darkTextSecondary
                         : AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
-                    letterSpacing: 0.2,
+                    letterSpacing: 0.1,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 3),
                 InkWell(
                   onTap: onProfileTap,
-                  borderRadius: BorderRadius.circular(6),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.location_on_rounded,
-                        size: 15,
-                        color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 9,
+                      vertical: 3.5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.darkSurface
+                          : const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : const Color(0xFFE2E8F0),
+                        width: 0.8,
                       ),
-                      const SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          location,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 13.5,
-                            fontWeight: FontWeight.w700,
-                            color: isDark
-                                ? AppColors.darkTextPrimary
-                                : AppColors.textPrimary,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.location_on_rounded,
+                          size: 13,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            location,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                              color: isDark
+                                  ? AppColors.darkTextPrimary
+                                  : AppColors.textPrimary,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 2),
-                      Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: 16,
-                        color: isDark
-                            ? AppColors.darkTextMuted
-                            : AppColors.textMuted,
-                      ),
-                    ],
+                        const SizedBox(width: 2),
+                        Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 14,
+                          color: isDark
+                              ? AppColors.darkTextMuted
+                              : AppColors.textMuted,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(width: 10),
 
           // Notification Button with Badge
           _HeaderIconButton(
@@ -204,21 +230,24 @@ class _HeaderIconButton extends StatelessWidget {
             top: -2,
             right: -2,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
               decoration: BoxDecoration(
                 color: AppColors.primary,
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: isDark ? AppColors.darkBackground : Colors.white,
                   width: 1.5,
                 ),
               ),
+              alignment: Alignment.center,
               child: Text(
                 '$badgeCount',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
+                  height: 1,
                 ),
               ),
             ),

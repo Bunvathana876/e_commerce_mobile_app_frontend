@@ -138,16 +138,21 @@ class HomeProductCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: Icon(
-                          product.isFavorite
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_border_rounded,
-                          size: 17,
-                          color: product.isFavorite
-                              ? const Color(0xFFEF4444)
-                              : (isDark
-                                    ? AppColors.darkTextSecondary
-                                    : const Color(0xFF94A3B8)),
+                        child: AnimatedScale(
+                          scale: product.isFavorite ? 1.15 : 1.0,
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeOutBack,
+                          child: Icon(
+                            product.isFavorite
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            size: 17,
+                            color: product.isFavorite
+                                ? const Color(0xFFEF4444)
+                                : (isDark
+                                      ? AppColors.darkTextSecondary
+                                      : const Color(0xFF94A3B8)),
+                          ),
                         ),
                       ),
                     ),
@@ -197,9 +202,19 @@ class HomeProductCard extends StatelessWidget {
                               : AppColors.textPrimary,
                         ),
                       ),
+                      Text(
+                        ' (${product.reviewsCount})',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: isDark
+                              ? AppColors.darkTextMuted
+                              : const Color(0xFF94A3B8),
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 4),
 
                   // Title
                   Text(
@@ -214,7 +229,7 @@ class HomeProductCard extends StatelessWidget {
                           : AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 6),
 
                   // Price & Add to Cart Row
                   Row(

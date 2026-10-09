@@ -27,16 +27,23 @@ class HomeSearchBar extends StatelessWidget {
           // Search Field
           Expanded(
             child: Container(
-              height: 48,
+              height: 50,
               decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(14),
+                color: isDark ? AppColors.darkSurface : const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isDark
                       ? AppColors.darkBorder
                       : const Color(0xFFE2E8F0),
                   width: 1,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.02),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: TextField(
                 controller: controller,
@@ -62,7 +69,7 @@ class HomeSearchBar extends StatelessWidget {
                     color: isDark
                         ? AppColors.darkTextSecondary
                         : const Color(0xFF64748B),
-                    size: 20,
+                    size: 21,
                   ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
@@ -78,16 +85,16 @@ class HomeSearchBar extends StatelessWidget {
           // Filter Button
           InkWell(
             onTap: onFilterTap ?? () {},
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
             child: Container(
-              width: 48,
-              height: 48,
+              width: 50,
+              height: 50,
               decoration: BoxDecoration(
                 color: AppColors.primary,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.28),
+                    color: AppColors.primary.withValues(alpha: 0.32),
                     blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),

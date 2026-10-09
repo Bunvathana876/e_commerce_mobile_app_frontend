@@ -12,6 +12,7 @@ class CategoryDetails {
   final List<String> subcategories;
   final String heroBannerText;
   final int itemCount;
+  final String? imageAsset;
 
   const CategoryDetails({
     required this.id,
@@ -23,6 +24,7 @@ class CategoryDetails {
     required this.subcategories,
     required this.heroBannerText,
     required this.itemCount,
+    this.imageAsset,
   });
 }
 
@@ -35,6 +37,7 @@ final List<CategoryDetails> allCategoryDetails = [
     icon: Icons.checkroom_rounded,
     badge: '🔥 Hot',
     accentColor: Color(0xFF2563EB),
+    imageAsset: 'assets/images/categories/fashion.png',
     subcategories: [
       'All Fashion',
       'Hoodies',
@@ -53,6 +56,7 @@ final List<CategoryDetails> allCategoryDetails = [
     icon: Icons.roller_skating_outlined,
     badge: '✨ Popular',
     accentColor: Color(0xFF0D9488),
+    imageAsset: 'assets/images/categories/shoes.png',
     subcategories: [
       'All Shoes',
       'Sneakers',
@@ -70,6 +74,7 @@ final List<CategoryDetails> allCategoryDetails = [
     icon: Icons.shopping_bag_rounded,
     badge: '🏷️ 20% Off',
     accentColor: Color(0xFF8B5CF6),
+    imageAsset: 'assets/images/categories/bags.png',
     subcategories: [
       'All Bags',
       'Crossbody',
@@ -87,6 +92,7 @@ final List<CategoryDetails> allCategoryDetails = [
     icon: Icons.devices_rounded,
     badge: '⚡ Trending',
     accentColor: Color(0xFF3B82F6),
+    imageAsset: 'assets/images/categories/electronics.png',
     subcategories: [
       'All Electronics',
       'Wireless Earbuds',

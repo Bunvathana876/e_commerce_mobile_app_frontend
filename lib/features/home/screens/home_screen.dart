@@ -430,9 +430,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.primary.withValues(
-                                alpha: isDark ? 0.2 : 0.18,
+                                alpha: isDark ? 0.25 : 0.2,
                               ),
-                              blurRadius: 12,
+                              blurRadius: 14,
                               offset: const Offset(0, 4),
                             ),
                           ],
@@ -445,6 +445,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.18),
                                 borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  width: 0.8,
+                                ),
                               ),
                               child: const Icon(
                                 Icons.bolt_rounded,
@@ -465,6 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
+                                      letterSpacing: -0.2,
                                     ),
                                   ),
                                   SizedBox(height: 2),
@@ -475,6 +480,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.white70,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 ],
@@ -551,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 0.68,
+                              childAspectRatio: 0.67,
                               crossAxisSpacing: 14,
                               mainAxisSpacing: 14,
                             ),

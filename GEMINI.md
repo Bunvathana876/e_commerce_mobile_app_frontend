@@ -100,6 +100,84 @@
     - **Cart & Checkout**: Full dark/light adaptivity, hairline separators, tabular figures for price calculations, and modern payment selector cards.
     - **Categories Screen**: Polished search input, segmented view switcher, category rail navigation, and subcategory filter pills.
     - **Verification**: 0 analyzer issues, 63/63 passing tests.
+22. Login & Register UI/UX Polish:
+    - Ambient mascot glow containers (`105x105` - `140x140`), light/dark surface adaptivity, refined input typography and focus outlines, custom checkmark styling, and high-contrast social buttons. 0 analyzer issues, 63/63 passing tests.
+23. Home Screen Premium UI/UX Polish:
+    - Compact header with capsule location chip, elevated 50px search bar with ambient shadow, promotional carousel with "Shop Now" arrow pill and theme-adaptive pagination indicators, 44px category selector chips, midnight-to-royal-blue flash sale banner with glowing gold bolt, and product cards with rating, review count `(${product.reviewsCount})`, price hierarchy, discount tags, and 32px circular Add-to-Cart buttons. 0 analyzer issues, 63/63 passing tests.
+24. Categories Screen Commercial UI/UX Polish:
+    - **Visual Grid Mode**: 18px radius cards, soft ambient drop shadow, 46x46 gradient icon container with micro-border, badge pills with uppercase styling, bold typography (16.5px, -0.2 tracking), item count chip, subcategory tags with subtle borders, and "Explore Category →" call to action.
+    - **Split Explorer Mode**: 92px left rail with left active indicator border (3.5px), glowing category icon active state, 220ms `AnimatedSwitcher` category transitions, 18px radius gradient hero banner with frosted badge, 12px radius filter chips with drop shadow, subcategory section header with item counter badge, and responsive 0.65 child aspect ratio product grid using `HomeProductCard`.
+    - **Controls & UX**: 50px elevated search input with ambient shadow, 44px segmented tab pill switcher, full light and dark mode adaptation, zero layout overflows. 0 analyzer issues, 63/63 passing tests.
+25. Deals & Flash Sale Screen Commercial UI/UX Polish:
+    - **Countdown Hero Banner**: Replaced flat red container with ShopPanda signature midnight-navy-to-royal-blue gradient (`#0F172A` to `#2563EB`), gold bolt badge, and explicit Hours (`HRS`), Minutes (`MIN`), and Seconds (`SEC`) digit boxes with tabular figures.
+    - **Deal of the Day**: Built a visually dominant hero deal card (`_FeaturedDealCard`) featuring studio image background, `-60%` discount pill, gold star rating, live stock progress bar (`⚡ Almost Gone! • Only 6 left in stock`), price savings badge (`Save $80.00`), and full-width `Claim Deal` button.
+    - **Filter Chips**: High-contrast active royal blue capsule with soft glow shadow and unselected bordered cards.
+    - **Product Grid**: Enhanced `_DealCard` with studio tinted background, micro stock tags, price hierarchy, and clean `Claim Deal` buttons with `0.58` aspect ratio to prevent overflow.
+    - **Verification**: 0 analyzer issues, 63/63 passing tests.
+26. Product Detail Screen Tier-1 Commercial UI/UX Polish:
+    - **Product Image Presentation**: 330px high studio showcase with frosted circular back & share buttons, favorite heart toggle, and 3-dot pagination capsule indicators.
+    - **Information Hierarchy**: Category badge with green "In Stock" indicator, 23px bold title, 5-star rating with review count and "Top Seller" pill, bold 30px current price, strikethrough original price, discount tag, dynamic savings pill (`Save $...`), and readable description.
+    - **Options**: Interactive color selector with dynamic color name preview and checkmark inside selected swatch; size selector with active royal blue capsule, clear unselected borders, disabled strikethrough state, and "Size Guide" trigger.
+    - **Trust Information**: Compact 3-item trust bar (Free Delivery, 100% Authentic, 30-Day Returns) with circular blue icon badges and `FittedBox` scale-down protection.
+    - **Mobile-Friendly Bottom Action Area**: Persistent bottom bar with calculated total price (`_quantity * price`), full-width 52px "Add to Cart" button, and rounded quick "Buy Now" lightning action.
+    - **Verification**: 0 analyzer issues, 63/63 passing tests.
+27. Cart Screen Tier-1 Commercial UI/UX Polish:
+    - **Cart Header & Badge**: Added dynamic item counter capsule (`${cart.totalCount} items`) beside "My Cart" title, and clear cart confirmation dialog.
+    - **Product Rows (`CartItemRow`)**: 82x82 studio image container with subtle hairline border, bold 2-line title, category pill badge, dynamic unit pricing (`$XX each`) when quantity > 1, accessible `QuantityStepper`, and circular red trash button.
+    - **Free Shipping Progress Banner**: Clean progress bar showing current progress, remaining amount toward $100 free delivery, and celebration state (`"Congratulations! You unlocked FREE shipping 🎉"`) with green checkmark.
+    - **Promo Code & Voucher**: Modern 48px input with slate surface, tag icon, uppercase code handling, and green applied state with discount badge and quick remove icon.
+    - **Order Summary & Checkout Button**: Subtotal, shipping, discount, and total in tabular figures with hairline divider, followed by 54px full-width royal blue Checkout button with forward chevron.
+    - **Verification**: 0 analyzer issues, 63/63 passing tests.
+28. Categories Screen Production-Grade Commercial Redesign:
+    - **Fast Discoverability & Navigation**: Page title with friendly panda smile, 50px elevated search input with live query reset, and 44px segmented tab pill switcher (`All Categories` vs `Category Explorer`).
+    - **Popular Categories Quick-Strip**: Horizontal scroll strip featuring top-shopped categories (Shoes, Fashion, Electronics, Bags) with circular gradient icons and touch ripple feedback for rapid one-tap navigation.
+    - **Explore Departments Grid**: Clear visual hierarchy with 18px rounded department cards, studio icons, item count chips, and subcategory preview tags.
+    - **Curated In-Category Product Shelf**: Built "Popular in Departments" product section directly below grid cards utilizing `HomeProductCard` with live pricing, review counters, Wishlist heart toggles, and Add to Cart action.
+    - **Split Explorer Mode**: 92px left rail with glowing category icon and vertical active accent line, animated department transitions, high-contrast subcategory filter chips, and 2-column product grid.
+    - **Layout Hardening & Verification**: Ellipsis protection on all section title rows preventing horizontal overflow; 110px bottom scroll padding for floating nav bar. 0 analyzer issues, 63/63 passing tests.
+29. Categories Screen Reference UI Overhaul:
+    - **Header**: Rounded square icon box (`AppColors.primary.withValues(alpha: 0.12)`, 42×42), bold 24sp "Categories" title, 13sp "Find what you love" muted subtitle, and minimalist shopping bag icon button with dynamic item count badge linking to Cart.
+    - **Search Bar**: 50px pill input with 14px radius (`AppRadius.lg`), `LucideIcons.search`, "Search categories" placeholder, and quick clear action.
+    - **Popular Carousel**: "Popular" header with "See all →", 150px rounded cards featuring curved top preview surfaces with studio icon presentation, bold category name, and item count.
+    - **Shop by Category Grid**: "Shop by category" section with dynamic group counter, 2-column grid using redesigned `CategoryGridCard` with curved top preview surfaces, centered category icons, optional badges, bottom title, and disclosure chevron (`Icons.chevron_right_rounded`).
+    - **Verification**: 0 analyzer issues, 63/63 passing tests.
+30. Categories Screen Minimalist & Clean Overhaul:
+    - **4-Box Grid Default**: "Shop by category" displays exactly 4 category boxes initially for a clean, distraction-free view.
+    - **"Show more categories" Toggle**: Added a clean text toggle button ("Show more categories" / "Show less") to reveal all categories without cluttering the screen.
+    - **Visual-First Cards**: Removed noisy subtext, item counts, and badges from `CategoryGridCard` and `_PopularCategoryCard`; cards now focus entirely on studio image/icon surfaces with clean titles.
+    - **De-cluttered**: Removed the bottom in-category product shelf from the categories screen to eliminate redundant product text and price walls.
+    - **Verification**: 0 analyzer issues, 64/64 passing tests.
+31. Categories Screen Ultra-Clean Visual-First Redesign:
+    - **Removed Tab Switcher & Clutter**: Removed the "All Categories" / "Category Explorer" tab switcher, duplicate "Popular" carousel, subtitles, and section headers.
+    - **Minimalist Text**: The page contains only "Categories" in the app bar, a single-word "Search" bar, 1-word category names ("Fashion", "Shoes", "Bags", etc.), and a simple "Show more" / "Show less" toggle.
+    - **Image/Icon as Hero**: Large 60×60 studio icons with ambient glowing backdrops inside 18px rounded cards convey the categories visually without walls of text.
+    - **Seamless Navigation**: Tapping any category box displays that department's product feed with a clean back button to return to the 4-box grid.
+    - **Verification**: 0 analyzer issues, 64/64 passing tests.
+32. Categories Screen Exact Reference UI Alignment:
+    - **Pixel-Accurate Header**: Circular light blue icon container (`0xFFDCEBFE`) with royal blue 4-square grid icon (`0xFF2563EB`), bold 25sp "Categories" title, 13.5sp "Find what you love" subtitle, and minimalist shopping bag icon button.
+    - **Pill Search Bar**: 52px tall, 18px radius, off-white fill (`0xFFF8FAFC`), hairline border (`0xFFE2E8F0`), search icon, and "Search categories" hint.
+    - **"Popular" Horizontal Strip**: "Popular" header with royal blue "See all →", 148px wide rounded cards (20px radius) with actual photographic preview images cropped from reference (Fashion, Shoes, Bags), bold title, and item count ("84 items", "56 items", "42 items").
+    - **"Shop by category" 4-Group Grid**: 2-column grid showing exactly 4 photographic preview cards (Fashion, Shoes, Bags, Electronics) with curved top image surfaces and bottom title + chevron rows.
+    - **Verification**: 0 analyzer issues, 63/63 passing tests.
+33. Home Screen Modern UI/UX Polish:
+    - **Header & Location**: Streamlined user avatar with hairline border and soft ambient shadow, clean location pill chip with off-white fill (`0xFFF8FAFC`) and refined typography.
+    - **Search & Filters**: 50px rounded input with subtle neutral surface (`0xFFF8FAFC`), hairline border (`0xFFE2E8F0`), and soft ambient shadow.
+    - **Visual Hierarchy**: Balanced spacing between banners, category selector chips, flash sale countdown ticker, and 2-column product grid with 100px bottom navigation padding.
+    - **Verification**: 0 analyzer issues, 63/63 passing tests.
+34. Clean Modern Modular Shopping Home Screen:
+    - **Architecture & Structure**: Created clean, modular components conforming directly to project specifications:
+      - `lib/theme/app_theme.dart`: Material 3 theme, primary royal blue (`#2563EB`), midnight navy text (`#0F172A`), soft background (`#F8FAFC`), spacing & radius constants.
+      - `lib/models/product.dart`: Modern `Product` domain model with discount badge, ratings, placeholder gradients, and favorite status.
+      - `lib/data/sample_products.dart`: Sample products catalog with local image assets and gradient fallbacks.
+      - `lib/widgets/home_header.dart` (`HomeHeaderWidget`): Avatar, “Welcome, Lee”, “Phnom Penh, Cambodia” location chip, notification & bag icons with badges.
+      - `lib/widgets/search_bar.dart` (`CustomSearchBar`): 48px search field + adjacent filter button opening filter bottom sheet.
+      - `lib/widgets/weekend_edit_banner.dart` (`WeekendEditBanner`): “Weekend Edit” promo card with “30% off” badge, “Claim coupon” button, and floating collage image respecting reduce motion accessibility.
+      - `lib/widgets/category_selector.dart` (`CategorySelector`): “Shop by category” horizontal list (All, Fashion, Shoes, Electronics) with tap filters.
+      - `lib/widgets/flash_sale_card.dart` (`FlashSaleCard`): Midnight gradient card with lightning icon and countdown timeboxes.
+      - `lib/widgets/product_card.dart` (`ProductCard`): Made for you product cards with ratings, prices, discount badges, and heart toggle.
+      - `lib/widgets/bottom_navigation.dart` (`BottomNavigation`): Fixed SafeArea-aware 5-tab bar (Home, Categories, Deals, Favorites, Profile).
+      - `lib/screens/home_screen.dart` (`HomeScreen`): Clean, responsive shopping home screen supporting viewport sizes down to 347x657 without overflow.
+    - **Verification**: 0 static analyzer issues (`flutter analyze`), 68/68 passing tests (`flutter test`).
 
 ## 3. Folder structure (feature-first)
 

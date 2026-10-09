@@ -84,16 +84,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark
+          ? AppColors.darkBackground
+          : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
         leadingWidth: 64,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+          padding: const EdgeInsets.only(left: 12.0),
           child: Center(
             child: InkWell(
               onTap: () {
@@ -108,21 +112,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark ? AppColors.darkSurface : Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(
+                    color: isDark
+                        ? AppColors.darkBorder
+                        : const Color(0xFFE2E8F0),
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 6,
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.3 : 0.04,
+                      ),
+                      blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_back_ios_new,
                   size: 16,
-                  color: AppColors.textPrimary,
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
                 ),
               ),
             ),
@@ -132,9 +145,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.symmetric(
               horizontal: 24.0,
-              vertical: 16.0,
+              vertical: 8.0,
             ),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
@@ -143,30 +158,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 8),
-
-                    // Centered Logo
+                    // Centered Mascot Logo with subtle ambient glow
                     Center(
-                      child: Image.asset(
-                        'assets/images/logo/Blue-and-White Panda LoveB.png',
-                        height: 150,
-                        width: 150,
-                        fit: BoxFit.contain,
+                      child: Container(
+                        width: 105,
+                        height: 105,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isDark ? AppColors.darkSurface : Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(
+                                alpha: isDark ? 0.2 : 0.08,
+                              ),
+                              blurRadius: 20,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(6),
+                        child: Image.asset(
+                          'assets/images/logo/Blue-and-White Panda LoveB.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 10),
 
                     // Centered title
-                    const Text(
+                    Text(
                       'Create an Account?',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        fontWeight: FontWeight.w800,
+                        color: isDark
+                            ? AppColors.darkTextPrimary
+                            : AppColors.textPrimary,
+                        letterSpacing: -0.5,
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 18),
 
                     // Field 1: Full Name
                     AuthTextField(
@@ -184,7 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
 
                     // Field 2: Email
                     AuthTextField(
@@ -207,7 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
 
                     // Field 3: Password
                     AuthTextField(
@@ -227,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
 
                     // Field 4: Confirm Password
                     AuthTextField(
@@ -248,7 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 14),
 
                     // Options: Remember me
                     Align(
@@ -274,11 +306,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Checkbox(
                                   value: _rememberMe,
                                   activeColor: AppColors.primary,
+                                  checkColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   side: BorderSide(
-                                    color: Colors.grey.shade400,
+                                    color: isDark
+                                        ? AppColors.darkBorder
+                                        : const Color(0xFFCBD5E1),
                                     width: 1.5,
                                   ),
                                   materialTapTargetSize:
@@ -294,8 +329,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Text(
                                 'Remember me',
                                 style: TextStyle(
-                                  color: Colors.grey.shade600,
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.textSecondary,
                                   fontSize: 13,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -303,7 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 22),
 
                     // Action Button: Sign up
                     AuthPrimaryButton(
@@ -311,36 +349,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       isLoading: _isLoading,
                       onPressed: _handleRegister,
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 26),
 
                     // Divider & Social Login
                     Row(
                       children: [
                         Expanded(
                           child: Divider(
-                            color: Colors.grey.shade300,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : const Color(0xFFE2E8F0),
                             thickness: 1,
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
                           child: Text(
                             'Or Log in with',
                             style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: 13,
+                              color: isDark
+                                  ? AppColors.darkTextMuted
+                                  : AppColors.textMuted,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                         Expanded(
                           child: Divider(
-                            color: Colors.grey.shade300,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : const Color(0xFFE2E8F0),
                             thickness: 1,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
                     // Social login buttons
                     SocialLoginButtons(
@@ -348,7 +393,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onFacebookTap: widget.onFacebookLogin,
                       onAppleTap: widget.onAppleLogin,
                     ),
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 30),
 
                     // Bottom Footer: Already have an account? Login
                     Wrap(
@@ -358,7 +403,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Text(
                           'Already have an account? ',
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.textSecondary,
                             fontSize: 14,
                           ),
                         ),
@@ -373,8 +420,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: const Text(
                             'Login',
                             style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w700,
                               fontSize: 14,
                             ),
                           ),

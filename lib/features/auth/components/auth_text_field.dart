@@ -42,6 +42,8 @@ class _AuthTextFieldState extends State<AuthTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return TextFormField(
       controller: widget.controller,
       keyboardType: widget.keyboardType,
@@ -50,17 +52,17 @@ class _AuthTextFieldState extends State<AuthTextField> {
       textInputAction: widget.textInputAction,
       onFieldSubmitted: widget.onFieldSubmitted,
       textCapitalization: widget.textCapitalization,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 15,
-        color: AppColors.textPrimary,
+        color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         labelText: widget.label,
         hintText: widget.hintText,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
-        labelStyle: const TextStyle(
-          color: AppColors.textSecondary,
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
           fontSize: 14,
         ),
         floatingLabelStyle: const TextStyle(
@@ -68,9 +70,18 @@ class _AuthTextFieldState extends State<AuthTextField> {
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
-        hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
+        hintStyle: TextStyle(
+          color: isDark ? AppColors.darkTextMuted : AppColors.textMuted,
+          fontSize: 14,
+        ),
         prefixIcon: widget.prefixIcon != null
-            ? Icon(widget.prefixIcon, color: AppColors.textSecondary, size: 20)
+            ? Icon(
+                widget.prefixIcon,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
+                size: 20,
+              )
             : null,
         suffixIcon: widget.isPassword
             ? IconButton(
@@ -78,7 +89,9 @@ class _AuthTextFieldState extends State<AuthTextField> {
                   _obscured
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
-                  color: AppColors.textSecondary,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
                   size: 20,
                 ),
                 onPressed: () {
@@ -87,18 +100,21 @@ class _AuthTextFieldState extends State<AuthTextField> {
               )
             : null,
         filled: true,
-        fillColor: Colors.white,
+        fillColor: isDark ? AppColors.darkSurface : Colors.white,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 18,
           vertical: 16,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.border, width: 1.2),
+          borderSide: BorderSide(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+            width: 1.2,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -106,7 +122,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.8),
         ),
       ),
     );

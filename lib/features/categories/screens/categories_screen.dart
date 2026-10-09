@@ -12,11 +12,13 @@ import '../../wishlist/controllers/wishlist_controller.dart';
 import '../components/category_grid_card.dart';
 import '../data/category_data.dart';
 
-/// Interactive Categories screen for ShopPanda.
+/// Categories Screen matching the reference commercial design.
 ///
-/// Provides two intuitive ways to browse:
-/// 1. Visual Category Grid: Big, informative department cards with subcategory previews.
-/// 2. Category Explorer: Split layout with a left sidebar rail and right subcategories & product feed.
+/// Layout:
+/// - Top Header: Circular blue icon box, bold "Categories" title, "Find what you love" subtitle, and shopping bag action.
+/// - Search Bar: Clean pill container with "Search categories" placeholder.
+/// - Popular Section: Horizontal carousel with image cards (Fashion, Shoes, Bags) and "See all →".
+/// - Shop by category Section: 2-column grid showing 4 category boxes with photographic preview surfaces.
 class CategoriesScreen extends StatefulWidget {
   final String? initialCategoryId;
 
@@ -27,9 +29,8 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  late String _selectedCategoryId;
+  String? _selectedCategoryId;
   String _selectedSubcategory = '';
-  int _viewModeIndex = 0; // 0 = Visual Grid, 1 = Category Explorer
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -39,12 +40,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedCategoryId =
-        widget.initialCategoryId ?? allCategoryDetails.first.id;
-    // If an initial category was explicitly requested, jump straight into Explorer mode
-    if (widget.initialCategoryId != null) {
-      _viewModeIndex = 1;
-    }
+    _selectedCategoryId = widget.initialCategoryId;
   }
 
   @override
@@ -53,7 +49,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     super.dispose();
   }
 
-  CategoryDetails get _currentCategory {
+  CategoryDetails? get _currentCategory {
+    if (_selectedCategoryId == null) return null;
     return allCategoryDetails.firstWhere(
       (c) => c.id == _selectedCategoryId,
       orElse: () => allCategoryDetails.first,
@@ -74,7 +71,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   List<HomeProduct> get _currentProducts {
-    final categoryId = _selectedCategoryId.toLowerCase();
+    if (_selectedCategoryId == null) return [];
+    final categoryId = _selectedCategoryId!.toLowerCase();
 
     var products = categoryExpandedProducts.where((p) {
       final cat = p.category.toLowerCase();
@@ -85,7 +83,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       return cat == categoryId;
     }).toList();
 
-    // If a subcategory filter is chosen (and not 'All ...')
+    // If a subcategory filter is chosen
     if (_selectedSubcategory.isNotEmpty &&
         !_selectedSubcategory.startsWith('All ')) {
       final sub = _selectedSubcategory.toLowerCase();
@@ -116,7 +114,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     setState(() {
       _selectedCategoryId = cat.id;
       _selectedSubcategory = cat.subcategories.first;
-      _viewModeIndex = 1; // Switch to explorer view
     });
   }
 
@@ -134,6 +131,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final currentCat = _currentCategory;
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
@@ -142,65 +140,93 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.category_rounded,
-                color: AppColors.primary,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        leading: currentCat != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : const Color(0xFF0F172A),
+                onPressed: () {
+                  setState(() {
+                    _selectedCategoryId = null;
+                    _selectedSubcategory = '';
+                  });
+                },
+              )
+            : null,
+        title: currentCat != null
+            ? Text(
+                currentCat.title.split('&').first.trim(),
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.4,
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : const Color(0xFF0F172A),
+                ),
+              )
+            : Row(
                 children: [
-                  Text(
-                    'Categories',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: isDark
-                          ? AppColors.darkTextPrimary
-                          : AppColors.textPrimary,
+                  // Left circular icon box
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFDCEBFE),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFFBFDBFE),
+                        width: 1,
+                      ),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.grid_view_rounded,
+                        color: Color(0xFF2563EB),
+                        size: 26,
+                      ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        'Browse all departments',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isDark
-                              ? AppColors.darkTextSecondary
-                              : AppColors.textSecondary,
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Categories',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                            color: isDark
+                                ? AppColors.darkTextPrimary
+                                : const Color(0xFF0F172A),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.sentiment_satisfied_alt_rounded,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ],
+                        const SizedBox(height: 1),
+                        Text(
+                          'Find what you love',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w500,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : const Color(0xFF64748B),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
         actions: [
-          // Cart shortcut button with badge
+          // Minimalist shopping bag button
           ListenableBuilder(
             listenable: _cart,
             builder: (context, _) {
@@ -208,10 +234,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 alignment: Alignment.center,
                 children: [
                   IconButton(
-                    icon: const Icon(LucideIcons.shoppingBag, size: 22),
+                    icon: const Icon(LucideIcons.shoppingBag, size: 24),
                     color: isDark
                         ? AppColors.darkTextPrimary
-                        : AppColors.textPrimary,
+                        : const Color(0xFF0F172A),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const CartScreen()),
@@ -225,7 +251,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: const BoxDecoration(
-                          color: AppColors.primary,
+                          color: Color(0xFF2563EB),
                           shape: BoxShape.circle,
                         ),
                         constraints: const BoxConstraints(
@@ -253,126 +279,73 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Search Bar & Mode Switcher Row
+            // Search Bar
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-              child: Column(
-                children: [
-                  // Search Bar
-                  Container(
-                    height: 48,
-                    decoration: BoxDecoration(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Container(
+                height: 52,
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? AppColors.darkSurface
+                      : const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: isDark
+                        ? AppColors.darkBorder
+                        : const Color(0xFFE2E8F0),
+                    width: 1,
+                  ),
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (val) => setState(() => _searchQuery = val),
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Search categories',
+                    hintStyle: TextStyle(
                       color: isDark
-                          ? AppColors.darkSurface
-                          : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: isDark
-                            ? AppColors.darkBorder
-                            : const Color(0xFFE2E8F0),
-                      ),
+                          ? AppColors.darkTextMuted
+                          : const Color(0xFF94A3B8),
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w400,
                     ),
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: (val) => setState(() => _searchQuery = val),
-                      style: TextStyle(
-                        fontSize: 14.5,
-                        color: isDark
-                            ? AppColors.darkTextPrimary
-                            : AppColors.textPrimary,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'Search categories or products...',
-                        hintStyle: TextStyle(
-                          color: isDark
-                              ? AppColors.darkTextMuted
-                              : AppColors.textMuted,
-                          fontSize: 14,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search_rounded,
-                          color: isDark
-                              ? AppColors.darkTextMuted
-                              : AppColors.textSecondary,
-                          size: 21,
-                        ),
-                        suffixIcon: _searchQuery.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.close_rounded, size: 18),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  setState(() => _searchQuery = '');
-                                },
-                              )
-                            : null,
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 13,
-                        ),
-                      ),
+                    prefixIcon: Icon(
+                      LucideIcons.search,
+                      color: isDark
+                          ? AppColors.darkTextMuted
+                          : const Color(0xFF64748B),
+                      size: 20,
+                    ),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.close_rounded, size: 18),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _searchQuery = '');
+                            },
+                          )
+                        : null,
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
                     ),
                   ),
-                  const SizedBox(height: 12),
-
-                  // View Switcher (Overview vs Explorer)
-                  Container(
-                    height: 42,
-                    padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? AppColors.darkSurface
-                          : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isDark
-                            ? AppColors.darkBorder
-                            : const Color(0xFFE2E8F0),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _ViewTabButton(
-                            icon: Icons.grid_view_rounded,
-                            label: 'All Categories',
-                            isSelected: _viewModeIndex == 0,
-                            onTap: () => setState(() => _viewModeIndex = 0),
-                          ),
-                        ),
-                        Expanded(
-                          child: _ViewTabButton(
-                            icon: Icons.view_sidebar_rounded,
-                            label: 'Category Explorer',
-                            isSelected: _viewModeIndex == 1,
-                            onTap: () => setState(() => _viewModeIndex = 1),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
 
-            // 2. Main Content
+            // Content
             Expanded(
-              child: _filteredCategories.isEmpty
-                  ? Center(
-                      child: PandaEmptyState(
-                        title: 'No categories found 🐼',
-                        message:
-                            'We could not find any category matching "$_searchQuery". Try another keyword!',
-                        buttonText: 'Clear Search',
-                        onButtonTap: () {
-                          _searchController.clear();
-                          setState(() => _searchQuery = '');
-                        },
-                      ),
-                    )
-                  : (_viewModeIndex == 0
-                        ? _buildGridView(isDark)
-                        : _buildExplorerView(isDark)),
+              child: currentCat != null
+                  ? _buildCategoryProductsView(isDark, currentCat)
+                  : _buildReferenceCategoriesView(isDark),
             ),
           ],
         ),
@@ -380,53 +353,149 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 
-  /// 1. Visual Category Grid View
-  Widget _buildGridView(bool isDark) {
+  /// Main view matching reference design:
+  /// - Popular horizontal carousel
+  /// - Shop by category (4 groups)
+  Widget _buildReferenceCategoriesView(bool isDark) {
+    if (_filteredCategories.isEmpty) {
+      return Center(
+        child: PandaEmptyState(
+          title: 'No categories found 🐼',
+          message: 'Try another keyword!',
+          buttonText: 'Clear Search',
+          onButtonTap: () {
+            _searchController.clear();
+            setState(() => _searchQuery = '');
+          },
+        ),
+      );
+    }
+
+    // Top 3 categories for Popular horizontal strip
+    final popularCategories = allCategoryDetails
+        .where((c) => ['fashion', 'shoes', 'bags'].contains(c.id))
+        .toList();
+
+    // Exactly 4 categories for "Shop by category"
+    final shopByCategories = _searchQuery.isNotEmpty
+        ? _filteredCategories
+        : _filteredCategories.take(4).toList();
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 110),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'Explore Departments (${_filteredCategories.length})',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+          // 1. "Popular" Header Row
+          if (_searchQuery.isEmpty) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Popular',
                   style: TextStyle(
-                    fontSize: 16.5,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.3,
                     color: isDark
                         ? AppColors.darkTextPrimary
-                        : AppColors.textPrimary,
+                        : const Color(0xFF0F172A),
                   ),
                 ),
+                InkWell(
+                  onTap: () {
+                    if (popularCategories.isNotEmpty) {
+                      _onCategoryTapped(popularCategories.first);
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'See all',
+                          style: TextStyle(
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF2563EB),
+                          ),
+                        ),
+                        SizedBox(width: 3),
+                        Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 16,
+                          color: Color(0xFF2563EB),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // Horizontal Carousel of Popular Cards
+            SizedBox(
+              height: 182,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: popularCategories.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 14),
+                itemBuilder: (context, index) {
+                  final cat = popularCategories[index];
+                  return _PopularPhotoCard(
+                    category: cat,
+                    onTap: () => _onCategoryTapped(cat),
+                  );
+                },
               ),
-              const SizedBox(width: 8),
+            ),
+            const SizedBox(height: 28),
+          ],
+
+          // 2. "Shop by category" Section Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Text(
-                'Tap to explore items',
+                'Shop by category',
                 style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.3,
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : const Color(0xFF0F172A),
+                ),
+              ),
+              Text(
+                '${shopByCategories.length} groups',
+                style: const TextStyle(
                   fontSize: 13,
-                  color: isDark ? AppColors.darkTextMuted : AppColors.textMuted,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF94A3B8),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
+
+          // 2-Column Grid (Shop by category)
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: _filteredCategories.length,
+            itemCount: shopByCategories.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.69,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+              childAspectRatio: 0.82,
             ),
             itemBuilder: (context, index) {
-              final cat = _filteredCategories[index];
+              final cat = shopByCategories[index];
               return CategoryGridCard(
                 category: cat,
                 onTap: () => _onCategoryTapped(cat),
@@ -438,350 +507,90 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 
-  /// 2. Split Explorer View (Left rail navigation + right products)
-  Widget _buildExplorerView(bool isDark) {
-    final currentCat = _currentCategory;
+  /// Category products view when user taps any card
+  Widget _buildCategoryProductsView(bool isDark, CategoryDetails currentCat) {
     final products = _currentProducts;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        // Left Vertical Rail Navigation
-        Container(
-          width: 88,
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.darkSurface : const Color(0xFFF8FAFC),
-            border: Border(
-              right: BorderSide(
-                color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
-                width: 1,
-              ),
-            ),
-          ),
-          child: ListView.builder(
-            itemCount: allCategoryDetails.length,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            itemBuilder: (context, index) {
-              final cat = allCategoryDetails[index];
-              final isSelected = cat.id == _selectedCategoryId;
+        // Subcategory chips
+        if (currentCat.subcategories.isNotEmpty)
+          Container(
+            height: 42,
+            margin: const EdgeInsets.only(bottom: 10),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: currentCat.subcategories.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final sub = currentCat.subcategories[index];
+                final isSubSelected = _selectedSubcategory.isEmpty
+                    ? index == 0
+                    : _selectedSubcategory == sub;
 
-              return InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedCategoryId = cat.id;
-                    _selectedSubcategory = cat.subcategories.first;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? (isDark ? AppColors.darkCard : Colors.white)
-                        : Colors.transparent,
-                    border: Border(
-                      left: BorderSide(
-                        color: isSelected
-                            ? cat.accentColor
-                            : Colors.transparent,
-                        width: 3.5,
-                      ),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? cat.accentColor.withValues(alpha: 0.15)
-                              : (isDark
-                                    ? AppColors.darkBackground
-                                    : const Color(0xFFF1F5F9)),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          cat.icon,
-                          size: 21,
-                          color: isSelected
-                              ? cat.accentColor
-                              : (isDark
-                                    ? AppColors.darkTextMuted
-                                    : AppColors.textSecondary),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        cat.title.split(' ').first,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: isSelected
-                              ? FontWeight.bold
-                              : FontWeight.w600,
-                          color: isSelected
-                              ? (isDark
-                                    ? AppColors.darkTextPrimary
-                                    : AppColors.textPrimary)
-                              : (isDark
-                                    ? AppColors.darkTextMuted
-                                    : AppColors.textSecondary),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-
-        // Right Content: Department Hero Banner + Subcategory Chips + Product Grid
-        Expanded(
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 110),
-            children: [
-              // Hero Department Gradient Card
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      currentCat.accentColor,
-                      currentCat.accentColor.withValues(alpha: 0.8),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: currentCat.accentColor.withValues(alpha: 0.28),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3.5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              currentCat.badge ?? 'FEATURED',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            currentCat.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            currentCat.heroBannerText,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.9),
-                              fontSize: 12.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        currentCat.icon,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 14),
-
-              // Subcategories Filter Chips
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: currentCat.subcategories.map((sub) {
-                    final isSubSelected = _selectedSubcategory.isEmpty
-                        ? sub == currentCat.subcategories.first
-                        : _selectedSubcategory == sub;
-
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() => _selectedSubcategory = sub);
-                        },
-                        borderRadius: BorderRadius.circular(10),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 180),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 7,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isSubSelected
-                                ? currentCat.accentColor
-                                : (isDark ? AppColors.darkCard : Colors.white),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: isSubSelected
-                                  ? currentCat.accentColor
-                                  : (isDark
-                                        ? AppColors.darkBorder
-                                        : const Color(0xFFE2E8F0)),
-                            ),
-                          ),
-                          child: Text(
-                            sub,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: isSubSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.w600,
-                              color: isSubSelected
-                                  ? Colors.white
-                                  : (isDark
-                                        ? AppColors.darkTextPrimary
-                                        : AppColors.textPrimary),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 14),
-
-              // Subcategory section header
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _selectedSubcategory.isEmpty
-                          ? currentCat.subcategories.first
-                          : _selectedSubcategory,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: isDark
-                            ? AppColors.darkTextPrimary
-                            : AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                  Container(
+                return InkWell(
+                  onTap: () => setState(() => _selectedSubcategory = sub),
+                  borderRadius: BorderRadius.circular(12),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
+                      horizontal: 14,
+                      vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? AppColors.darkSurface
-                          : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(6),
+                      color: isSubSelected
+                          ? const Color(0xFF2563EB)
+                          : (isDark ? AppColors.darkCard : Colors.white),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isDark
-                            ? AppColors.darkBorder
-                            : const Color(0xFFE2E8F0),
-                        width: 0.8,
+                        color: isSubSelected
+                            ? const Color(0xFF2563EB)
+                            : (isDark
+                                  ? AppColors.darkBorder
+                                  : const Color(0xFFE2E8F0)),
                       ),
                     ),
-                    child: Text(
-                      '${products.length} items',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isDark
-                            ? AppColors.darkTextSecondary
-                            : AppColors.textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-
-              // Product Grid for this Category
-              if (products.isEmpty)
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 40),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.inventory_2_outlined,
-                        size: 44,
-                        color: isDark
-                            ? AppColors.darkTextMuted
-                            : AppColors.textMuted,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'No products found in this subcategory',
+                    child: Center(
+                      child: Text(
+                        sub,
                         style: TextStyle(
-                          fontSize: 14,
-                          color: isDark
-                              ? AppColors.darkTextSecondary
-                              : AppColors.textSecondary,
+                          fontSize: 12.5,
+                          fontWeight: isSubSelected
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                          color: isSubSelected
+                              ? Colors.white
+                              : (isDark
+                                    ? AppColors.darkTextPrimary
+                                    : AppColors.textPrimary),
                         ),
                       ),
-                    ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+
+        // Product Grid
+        Expanded(
+          child: products.isEmpty
+              ? Center(
+                  child: PandaEmptyState(
+                    title: 'No products yet 🐼',
+                    message: 'Check back soon for new arrivals!',
                   ),
                 )
-              else
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+              : GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
                   itemCount: products.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 0.68,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
                   ),
                   itemBuilder: (context, index) {
                     final product = products[index];
@@ -795,75 +604,118 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     );
                   },
                 ),
-            ],
-          ),
         ),
       ],
     );
   }
 }
 
-/// Segmented tab button for switching view modes.
-class _ViewTabButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
+/// Popular horizontal card with photo preview matching reference design
+class _PopularPhotoCard extends StatelessWidget {
+  final CategoryDetails category;
   final VoidCallback onTap;
 
-  const _ViewTabButton({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const _PopularPhotoCard({required this.category, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final unselectedColor = isDark
-        ? AppColors.darkTextSecondary
-        : AppColors.textSecondary;
+    final shortTitle = category.title.split('&').first.trim();
 
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.25),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
+    return Container(
+      width: 148,
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkCard : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : const Color(0xFFF1F5F9),
+          width: 1,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 17,
-              color: isSelected ? Colors.white : unselectedColor,
-            ),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  color: isSelected ? Colors.white : unselectedColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.035),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top photo preview surface
+              Container(
+                height: 108,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(19)),
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(19),
+                  ),
+                  child: category.imageAsset != null
+                      ? Image.asset(
+                          category.imageAsset!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (_, _, _) => _buildFallback(isDark),
+                        )
+                      : _buildFallback(isDark),
                 ),
               ),
-            ),
-          ],
+
+              // Bottom content
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      shortTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.2,
+                        color: isDark
+                            ? AppColors.darkTextPrimary
+                            : const Color(0xFF0F172A),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${category.itemCount} items',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF94A3B8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFallback(bool isDark) {
+    return Container(
+      color: category.accentColor.withValues(alpha: isDark ? 0.15 : 0.08),
+      child: Center(
+        child: Icon(category.icon, color: category.accentColor, size: 28),
       ),
     );
   }

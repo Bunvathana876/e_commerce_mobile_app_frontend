@@ -76,23 +76,25 @@ class _CustomFloatingNavBarState extends State<CustomFloatingNavBar> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Translucent shell color with enhanced transparency
+    // Translucent shell color with enhanced transparency and contrast
     final Color effectiveShellColor =
         widget.shellColor ??
         (isDark
             ? const Color(0x660F172A)
-            : Colors.white.withValues(alpha: 0.35));
+            : Colors.white.withValues(alpha: 0.72));
 
     final bool isShellDark = effectiveShellColor.computeLuminance() < 0.5;
 
-    // Soft 1px translucent border
-    final Color effectiveBorder = Colors.white.withValues(alpha: 0.18);
+    // Translucent hairline border adapted to theme
+    final Color effectiveBorder = isDark
+        ? Colors.white.withValues(alpha: 0.18)
+        : Colors.black.withValues(alpha: 0.08);
 
     final Color effectiveActive = widget.activeColor ?? const Color(0xFF2563EB);
 
     final Color effectiveInactive = isShellDark
         ? const Color(0xFFCBD5E1)
-        : const Color(0xFF475569);
+        : const Color(0xFF64748B);
 
     final Color shadowColor = isShellDark
         ? Colors.black.withValues(alpha: 0.45)

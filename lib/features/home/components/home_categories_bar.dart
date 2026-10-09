@@ -20,27 +20,27 @@ class HomeCategoriesBar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SizedBox(
-      height: 42,
+      height: 44,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        separatorBuilder: (context, index) => const SizedBox(width: 9),
         itemBuilder: (context, index) {
           final cat = categories[index];
           final isSelected = cat.id == selectedCategoryId;
 
           return InkWell(
             onTap: () => onSelectCategory(cat.id),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primary
                     : (isDark ? AppColors.darkSurface : Colors.white),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isSelected
                       ? AppColors.primary
@@ -52,8 +52,8 @@ class HomeCategoriesBar extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: isSelected
-                        ? AppColors.primary.withValues(alpha: 0.25)
-                        : Colors.black.withValues(alpha: isDark ? 0.2 : 0.02),
+                        ? AppColors.primary.withValues(alpha: 0.3)
+                        : Colors.black.withValues(alpha: isDark ? 0.2 : 0.025),
                     blurRadius: isSelected ? 8 : 4,
                     offset: const Offset(0, 2),
                   ),
@@ -63,12 +63,12 @@ class HomeCategoriesBar extends StatelessWidget {
                 children: [
                   Icon(
                     cat.icon,
-                    size: 16,
+                    size: 16.5,
                     color: isSelected
                         ? Colors.white
                         : (isDark
                               ? AppColors.darkTextSecondary
-                              : AppColors.textSecondary),
+                              : const Color(0xFF64748B)),
                   ),
                   const SizedBox(width: 7),
                   Text(
@@ -77,12 +77,12 @@ class HomeCategoriesBar extends StatelessWidget {
                       fontSize: 13,
                       fontWeight: isSelected
                           ? FontWeight.w700
-                          : FontWeight.w500,
+                          : FontWeight.w600,
                       color: isSelected
                           ? Colors.white
                           : (isDark
                                 ? AppColors.darkTextPrimary
-                                : AppColors.textPrimary),
+                                : const Color(0xFF334155)),
                     ),
                   ),
                 ],

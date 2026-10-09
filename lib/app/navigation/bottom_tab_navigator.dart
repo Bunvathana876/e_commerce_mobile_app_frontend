@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../features/cart/screens/cart_screen.dart';
-import '../../features/categories/screens/categories_screen.dart';
+import '../../features/categories/screens/categories_page.dart';
 import '../../features/deals/screens/deals_screen.dart';
 import '../../features/home/components/home_bottom_nav_bar.dart';
-import '../../features/home/screens/home_screen.dart';
+import '../../screens/home_screen.dart';
 import '../../features/orders/screens/order_history_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../../features/wishlist/screens/wishlist_screen.dart';
@@ -51,7 +51,10 @@ class _BottomTabNavigatorState extends State<BottomTabNavigator> {
             onCategoriesTap: () => _goTo(BottomTabNavigator.categoriesTab),
             showBottomNav: false,
           ),
-          const CategoriesScreen(),
+          CategoriesPage(
+            showBottomNav: false,
+            onTabSelected: _goTo,
+          ),
           DealsScreen(
             onStartShopping: () => _goTo(BottomTabNavigator.homeTab),
             onViewCart: () => _goTo(BottomTabNavigator.cartTab),

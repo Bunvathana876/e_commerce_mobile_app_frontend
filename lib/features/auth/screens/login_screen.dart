@@ -83,11 +83,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark
+          ? AppColors.darkBackground
+          : const Color(0xFFF8FAFC),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.symmetric(
               horizontal: 24.0,
               vertical: 16.0,
@@ -101,31 +107,59 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const SizedBox(height: 8),
 
-                    // Centered Logo
+                    // Centered Logo with soft ambient glow
                     Center(
-                      child: Image.asset(
-                        'assets/images/logo/Blue-and-White Panda Waving.png',
-                        height: 150,
-                        width: 150,
-                        fit: BoxFit.contain,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.darkSurface.withValues(alpha: 0.5)
+                              : Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(
+                                alpha: isDark ? 0.12 : 0.08,
+                              ),
+                              blurRadius: 20,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Image.asset(
+                          'assets/images/logo/Blue-and-White Panda Waving.png',
+                          height: 140,
+                          width: 140,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
 
                     // Header Text
-                    const Text(
+                    Text(
                       'Welcome to ShopPanda',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, color: Colors.black87),
+                      style: TextStyle(
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.2,
+                        color: isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.textSecondary,
+                      ),
                     ),
-                    const SizedBox(height: 6),
-                    const Text(
+                    const SizedBox(height: 4),
+                    Text(
                       'Login now!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.5,
+                        color: isDark
+                            ? AppColors.darkTextPrimary
+                            : AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 28),
@@ -199,11 +233,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Checkbox(
                                     value: _rememberMe,
                                     activeColor: AppColors.primary,
+                                    checkColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     side: BorderSide(
-                                      color: Colors.grey.shade400,
+                                      color: isDark
+                                          ? AppColors.darkBorder
+                                          : const Color(0xFF94A3B8),
                                       width: 1.5,
                                     ),
                                     materialTapTargetSize:
@@ -219,8 +256,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Text(
                                   'Remember me',
                                   style: TextStyle(
-                                    color: Colors.grey.shade600,
+                                    color: isDark
+                                        ? AppColors.darkTextSecondary
+                                        : AppColors.textSecondary,
                                     fontSize: 13,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
@@ -240,9 +280,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Forgot password?',
                             style: TextStyle(
-                              color: Colors.grey.shade600,
+                              color: isDark
+                                  ? const Color(0xFF60A5FA)
+                                  : AppColors.primary,
                               fontSize: 13,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -263,7 +305,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Expanded(
                           child: Divider(
-                            color: Colors.grey.shade300,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : const Color(0xFFE2E8F0),
                             thickness: 1,
                           ),
                         ),
@@ -272,14 +316,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Or Log in with',
                             style: TextStyle(
-                              color: Colors.grey.shade600,
+                              color: isDark
+                                  ? AppColors.darkTextMuted
+                                  : AppColors.textMuted,
                               fontSize: 13,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                         Expanded(
                           child: Divider(
-                            color: Colors.grey.shade300,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : const Color(0xFFE2E8F0),
                             thickness: 1,
                           ),
                         ),
@@ -303,7 +352,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         Text(
                           "Didn't have an account? ",
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.textSecondary,
                             fontSize: 14,
                           ),
                         ),
@@ -317,10 +368,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 );
                               },
-                          child: const Text(
+                          child: Text(
                             'Create an account',
                             style: TextStyle(
-                              color: Colors.black,
+                              color: isDark
+                                  ? const Color(0xFF60A5FA)
+                                  : AppColors.primary,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
