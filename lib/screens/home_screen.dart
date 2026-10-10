@@ -136,9 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showFilterModal() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -154,28 +155,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Filter & Sort',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
-                          color: AppTheme.textPrimary,
+                          color: isDark ? Colors.white : AppTheme.textPrimary,
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.close_rounded),
+                        icon: Icon(
+                          Icons.close_rounded,
+                          color: isDark ? Colors.white70 : AppTheme.textPrimary,
+                        ),
                         tooltip: 'Close filter dialog',
                         onPressed: () => Navigator.of(ctx).pop(),
                       ),
                     ],
                   ),
                   const SizedBox(height: 14),
-                  const Text(
+                  Text(
                     'Sort Products By',
                     style: TextStyle(
                       fontSize: 13.5,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.textPrimary,
+                      color: isDark ? Colors.white : AppTheme.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -243,9 +247,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showNotificationsSheet() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -296,8 +301,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackgroundColor(context),
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -362,12 +368,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Made for you',
                             style: TextStyle(
                               fontSize: 16.5,
                               fontWeight: FontWeight.w800,
-                              color: AppTheme.textPrimary,
+                              color: isDark ? Colors.white : AppTheme.textPrimary,
                               letterSpacing: -0.2,
                             ),
                           ),

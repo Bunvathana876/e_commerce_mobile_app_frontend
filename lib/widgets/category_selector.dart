@@ -57,7 +57,7 @@ class CategorySelector extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Shop by category',
                   maxLines: 1,
@@ -65,7 +65,7 @@ class CategorySelector extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16.5,
                     fontWeight: FontWeight.w800,
-                    color: AppTheme.textPrimary,
+                    color: AppTheme.getTextPrimary(context),
                     letterSpacing: -0.2,
                   ),
                 ),
@@ -122,7 +122,7 @@ class CategorySelector extends StatelessWidget {
               children: [
                 for (int i = 0; i < categories.length; i++) ...[
                   if (i > 0) const SizedBox(width: 6),
-                  _buildCategoryChip(categories[i]),
+                  _buildCategoryChip(context, categories[i]),
                 ],
               ],
             ),
@@ -132,7 +132,7 @@ class CategorySelector extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryChip(CategoryItem cat) {
+  Widget _buildCategoryChip(BuildContext context, CategoryItem cat) {
     final isSelected = cat.id == selectedCategoryId;
     return Semantics(
       label: 'Category ${cat.label}',
@@ -146,10 +146,14 @@ class CategorySelector extends StatelessWidget {
           curve: Curves.easeInOut,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primary : AppTheme.cardBackground,
+            color: isSelected
+                ? AppTheme.primary
+                : AppTheme.getCardBackground(context),
             borderRadius: BorderRadius.circular(AppTheme.radiusMd),
             border: Border.all(
-              color: isSelected ? AppTheme.primary : AppTheme.border,
+              color: isSelected
+                  ? AppTheme.primary
+                  : AppTheme.getBorder(context),
               width: 1,
             ),
             boxShadow: [
@@ -168,7 +172,9 @@ class CategorySelector extends StatelessWidget {
               Icon(
                 cat.icon,
                 size: 16,
-                color: isSelected ? Colors.white : AppTheme.textSecondary,
+                color: isSelected
+                    ? Colors.white
+                    : AppTheme.getTextSecondary(context),
               ),
               const SizedBox(width: 5),
               Text(
@@ -176,7 +182,9 @@ class CategorySelector extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12.5,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-                  color: isSelected ? Colors.white : AppTheme.textPrimary,
+                  color: isSelected
+                      ? Colors.white
+                      : AppTheme.getTextPrimary(context),
                 ),
               ),
             ],

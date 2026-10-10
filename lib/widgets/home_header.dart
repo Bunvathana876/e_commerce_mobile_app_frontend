@@ -67,6 +67,8 @@ class HomeHeaderWidget extends StatelessWidget {
                     child: Image.asset(
                       'assets/images/logo/Blue-and-White Panda Waving.png',
                       fit: BoxFit.cover,
+                      cacheWidth: 120,
+                      cacheHeight: 120,
                       errorBuilder: (context, error, stackTrace) => const Icon(
                         Icons.person_rounded,
                         color: AppTheme.primary,
@@ -90,10 +92,10 @@ class HomeHeaderWidget extends StatelessWidget {
                   'Welcome, $userName',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    color: AppTheme.textSecondary,
+                    color: AppTheme.getTextSecondary(context),
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -111,12 +113,12 @@ class HomeHeaderWidget extends StatelessWidget {
                           vertical: 3.5,
                         ),
                         decoration: BoxDecoration(
-                          color: AppTheme.cardBackground,
+                          color: AppTheme.getCardBackground(context),
                           borderRadius: BorderRadius.circular(
                             AppTheme.radiusXl,
                           ),
                           border: Border.all(
-                            color: AppTheme.border,
+                            color: AppTheme.getBorder(context),
                             width: 0.8,
                           ),
                         ),
@@ -134,18 +136,18 @@ class HomeHeaderWidget extends StatelessWidget {
                                 location,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 11.5,
                                   fontWeight: FontWeight.w700,
-                                  color: AppTheme.textPrimary,
+                                  color: AppTheme.getTextPrimary(context),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 2),
-                            const Icon(
+                            Icon(
                               Icons.keyboard_arrow_down_rounded,
                               size: 14,
-                              color: AppTheme.textMuted,
+                              color: AppTheme.getTextMuted(context),
                             ),
                           ],
                         ),
@@ -211,9 +213,9 @@ class _HeaderIconButton extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppTheme.cardBackground,
+                color: AppTheme.getCardBackground(context),
                 shape: BoxShape.circle,
-                border: Border.all(color: AppTheme.border, width: 1),
+                border: Border.all(color: AppTheme.getBorder(context), width: 1),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.03),
@@ -227,7 +229,7 @@ class _HeaderIconButton extends StatelessWidget {
                 child: InkWell(
                   customBorder: const CircleBorder(),
                   onTap: onTap,
-                  child: Icon(icon, color: AppTheme.textPrimary, size: 20),
+                  child: Icon(icon, color: AppTheme.getTextPrimary(context), size: 20),
                 ),
               ),
             ),

@@ -171,6 +171,8 @@ class _CategoryDetailSheetState extends State<CategoryDetailSheet> {
                               Image.asset(
                                 cat.imageAsset!,
                                 fit: BoxFit.cover,
+                                cacheWidth: 600,
+                                cacheHeight: 400,
                                 errorBuilder: (context, error, stackTrace) =>
                                     _buildFallbackHero(cat, isDark),
                               )
@@ -426,6 +428,8 @@ class _ProductRow extends StatelessWidget {
                         ? Image.asset(
                             product.imageAsset!,
                             fit: BoxFit.cover,
+                            cacheWidth: 150,
+                            cacheHeight: 150,
                             errorBuilder: (context, error, stackTrace) => Icon(
                               product.fallbackIcon,
                               color: const Color(0xFF2563EB),

@@ -27,9 +27,9 @@ class ProductCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppTheme.radiusLg),
       child: Container(
         decoration: BoxDecoration(
-          color: AppTheme.cardBackground,
+          color: AppTheme.getCardBackground(context),
           borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-          border: Border.all(color: AppTheme.border, width: 1),
+          border: Border.all(color: AppTheme.getBorder(context), width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -64,6 +64,8 @@ class ProductCard extends StatelessWidget {
                           ? Image.asset(
                               product.imageAsset!,
                               fit: BoxFit.contain,
+                              cacheWidth: 360,
+                              cacheHeight: 360,
                               errorBuilder: (context, error, stackTrace) =>
                                   _buildFallbackIcon(),
                             )
@@ -71,6 +73,8 @@ class ProductCard extends StatelessWidget {
                                 ? Image.network(
                                     product.imageUrl!,
                                     fit: BoxFit.contain,
+                                    cacheWidth: 360,
+                                    cacheHeight: 360,
                                     errorBuilder:
                                         (context, error, stackTrace) =>
                                             _buildFallbackIcon(),
@@ -123,10 +127,10 @@ class ProductCard extends StatelessWidget {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.95),
+                            color: AppTheme.getCardBackground(context).withValues(alpha: 0.95),
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: AppTheme.border,
+                              color: AppTheme.getBorder(context),
                               width: 0.8,
                             ),
                             boxShadow: [
@@ -148,7 +152,7 @@ class ProductCard extends StatelessWidget {
                               size: 16.5,
                               color: product.isFavorite
                                   ? AppTheme.saleRed
-                                  : AppTheme.textMuted,
+                                  : AppTheme.getTextMuted(context),
                             ),
                           ),
                         ),
@@ -174,10 +178,10 @@ class ProductCard extends StatelessWidget {
                           product.category.toUpperCase(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 9.5,
                             fontWeight: FontWeight.w700,
-                            color: AppTheme.textMuted,
+                            color: AppTheme.getTextMuted(context),
                             letterSpacing: 0.4,
                           ),
                         ),
@@ -191,10 +195,10 @@ class ProductCard extends StatelessWidget {
                       const SizedBox(width: 2),
                       Text(
                         product.rating.toStringAsFixed(1),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 10.5,
                           fontWeight: FontWeight.w700,
-                          color: AppTheme.textPrimary,
+                          color: AppTheme.getTextPrimary(context),
                         ),
                       ),
                     ],
@@ -206,10 +210,10 @@ class ProductCard extends StatelessWidget {
                     product.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.textPrimary,
+                      color: AppTheme.getTextPrimary(context),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -237,10 +241,10 @@ class ProductCard extends StatelessWidget {
                                 '\$${product.originalPrice!.toStringAsFixed(2)}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 10,
                                   decoration: TextDecoration.lineThrough,
-                                  color: AppTheme.textMuted,
+                                  color: AppTheme.getTextMuted(context),
                                 ),
                               ),
                           ],

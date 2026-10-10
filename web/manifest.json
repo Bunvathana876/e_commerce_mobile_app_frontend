@@ -1,13 +1,14 @@
 {
-    "name": "e_commerce_mobile_app",
-    "short_name": "e_commerce_mobile_app",
+    "name": "ShopPanda - Fashion & Lifestyle Shopping",
+    "short_name": "ShopPanda",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0F172A",
+    "theme_color": "#2563EB",
+    "description": "ShopPanda is a modern fashion, shoes, electronics, and lifestyle shopping mobile and web app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "categories": ["shopping", "lifestyle", "fashion"],
     "icons": [
         {
             "src": "icons/Icon-192.png",

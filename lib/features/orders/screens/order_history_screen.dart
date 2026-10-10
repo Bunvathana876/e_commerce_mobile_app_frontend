@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../components/empty_state/empty_state.dart';
+import '../../../components/header/app_screen_header.dart';
 import '../../../core/constants/colors.dart';
 import '../components/order_tracking_card.dart';
 import '../controllers/orders_controller.dart';
@@ -24,111 +25,84 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     final controller = OrdersController.instance;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
-      appBar: AppBar(
-        backgroundColor: isDark
-            ? AppColors.darkBackground
-            : AppColors.background,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          'My Orders',
-          style: TextStyle(
-            color: isDark ? Colors.white : AppColors.textPrimary,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            letterSpacing: -0.3,
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, _) {
+        final allOrders = controller.orders;
+        final filteredOrders = _selectedStatus == null
+            ? allOrders
+            : allOrders.where((o) => o.status == _selectedStatus).toList();
+
+        return Scaffold(
+          backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
+          appBar: AppScreenHeader(
+            title: 'My Orders',
+            subtitle: 'Track & manage',
+            badgeText: allOrders.isNotEmpty ? '${allOrders.length} orders' : null,
+            showBackButton: Navigator.of(context).canPop(),
+            leadingIcon: LucideIcons.package,
+            leadingIconColor: const Color(0xFFD97706),
           ),
-        ),
-      ),
-      body: ListenableBuilder(
-        listenable: controller,
-        builder: (context, _) {
-          final allOrders = controller.orders;
-          if (allOrders.isEmpty) {
-            return EmptyState(
-              icon: LucideIcons.package,
-              title: 'No orders yet',
-              message: 'When you place an order, you can track it here.',
-              buttonText: 'Start Shopping',
-              onButtonTap: widget.onStartShopping,
-            );
-          }
-
-          final filteredOrders = _selectedStatus == null
-              ? allOrders
-              : allOrders.where((o) => o.status == _selectedStatus).toList();
-
-          return Column(
-            children: [
-              // Filter Chips
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 8,
-                ),
-                child: Row(
+          body: allOrders.isEmpty
+              ? EmptyState(
+                  icon: LucideIcons.package,
+                  title: 'No orders yet',
+                  message: 'When you place an order, you can track it here.',
+                  buttonText: 'Start Shopping',
+                  onButtonTap: widget.onStartShopping,
+                )
+              : Column(
                   children: [
-                    _FilterChip(
-                      label: 'All (${allOrders.length})',
-                      isSelected: _selectedStatus == null,
-                      onTap: () => setState(() => _selectedStatus = null),
-                    ),
-                    const SizedBox(width: 8),
-                    for (final status in OrderStatus.values) ...[
-                      _FilterChip(
-                        label: status.label,
-                        isSelected: _selectedStatus == status,
-                        onTap: () => setState(() => _selectedStatus = status),
+                    // Filter Chips
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
                       ),
-                      const SizedBox(width: 8),
-                    ],
-                  ],
-                ),
-              ),
-
-              Expanded(
-                child: filteredOrders.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              LucideIcons.packageX,
-                              size: 44,
-                              color: isDark
-                                  ? AppColors.darkTextMuted
-                                  : AppColors.textMuted,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'No ${_selectedStatus?.label.toLowerCase()} orders',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: isDark
-                                    ? AppColors.darkTextSecondary
-                                    : AppColors.textSecondary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView(
-                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                      child: Row(
                         children: [
-                          for (final o in filteredOrders)
-                            OrderTrackingCard(order: o),
+                          _FilterChip(
+                            label: 'All (${allOrders.length})',
+                            isSelected: _selectedStatus == null,
+                            onTap: () => setState(() => _selectedStatus = null),
+                          ),
+                          const SizedBox(width: 8),
+                          for (final status in OrderStatus.values) ...[
+                            _FilterChip(
+                              label: status.label,
+                              isSelected: _selectedStatus == status,
+                              onTap: () => setState(() => _selectedStatus = status),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
                         ],
                       ),
-              ),
-            ],
-          );
-        },
-      ),
+                    ),
+                    Expanded(
+                      child: filteredOrders.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No ${_selectedStatus!.label.toLowerCase()} orders',
+                                style: TextStyle(
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.textSecondary,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                              itemCount: filteredOrders.length,
+                              itemBuilder: (context, index) =>
+                                  OrderTrackingCard(order: filteredOrders[index]),
+                            ),
+                    ),
+                  ],
+                ),
+        );
+      },
     );
   }
 }

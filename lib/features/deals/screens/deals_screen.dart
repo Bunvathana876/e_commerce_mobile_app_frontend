@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../../components/header/app_screen_header.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../components/toast/custom_toast.dart';
 import '../../../core/constants/colors.dart';
@@ -165,64 +166,18 @@ class _DealsScreenState extends State<DealsScreen> {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
-      appBar: AppBar(
-        backgroundColor: isDark ? AppColors.darkBackground : Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: false,
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEF4444).withValues(alpha: 0.12),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.local_fire_department_rounded,
-                color: Color(0xFFEF4444),
-                size: 22,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Deals & Offers',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.3,
-                      color: isDark
-                          ? AppColors.darkTextPrimary
-                          : AppColors.textPrimary,
-                    ),
-                  ),
-                  Text(
-                    'Exclusive daily discounts',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark
-                          ? AppColors.darkTextSecondary
-                          : AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      appBar: AppScreenHeader(
+        title: 'Deals & Offers',
+        subtitle: 'Exclusive daily discounts',
+        leadingIcon: Icons.local_fire_department_rounded,
+        leadingIconColor: const Color(0xFFEF4444),
         actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.shoppingBag, size: 22),
-            color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
-            onPressed: () {
+          AppHeaderActionButton(
+            icon: LucideIcons.shoppingBag,
+            tooltip: 'Shopping Cart',
+            semanticLabel: 'Shopping Cart, ${_cart.totalCount} items',
+            badgeCount: _cart.totalCount,
+            onTap: () {
               if (widget.onViewCart != null) {
                 widget.onViewCart!();
               } else {
@@ -232,7 +187,6 @@ class _DealsScreenState extends State<DealsScreen> {
               }
             },
           ),
-          const SizedBox(width: 8),
         ],
       ),
       body: ListenableBuilder(

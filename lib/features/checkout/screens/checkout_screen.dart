@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../components/header/app_screen_header.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../../../core/utils/currency.dart';
@@ -75,25 +76,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
-      appBar: AppBar(
-        backgroundColor: isDark
-            ? AppColors.darkBackground
-            : AppColors.background,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Checkout',
-          style: TextStyle(
-            color: isDark ? Colors.white : AppColors.textPrimary,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            letterSpacing: -0.3,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: isDark ? Colors.white : AppColors.textPrimary,
-        ),
+      appBar: const AppScreenHeader(
+        title: 'Checkout',
+        subtitle: 'Review & Pay',
+        showBackButton: true,
+        leadingIcon: Icons.lock_outline_rounded,
+        leadingIconColor: AppColors.primary,
       ),
       body: Form(
         key: _formKey,

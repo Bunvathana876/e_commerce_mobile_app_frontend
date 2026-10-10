@@ -197,6 +197,7 @@ class _HomePromoCarouselState extends State<HomePromoCarousel> {
                                           banner.assetImage!,
                                           height: 90,
                                           fit: BoxFit.contain,
+                                          cacheHeight: 180,
                                           errorBuilder:
                                               (
                                                 context,

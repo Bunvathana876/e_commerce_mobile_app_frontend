@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/colors.dart';
 import '../../cart/controllers/cart_controller.dart';
 import '../../cart/screens/cart_screen.dart';
 import '../../deals/screens/deals_screen.dart';
@@ -273,138 +274,107 @@ class _CategoriesPageState extends State<CategoriesPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth > 800;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      body: SafeArea(
-        bottom: false,
-        child: Center(
-          child: Container(
-            constraints: BoxConstraints(
-              maxWidth: isDesktop ? 900 : double.infinity,
-            ),
-            margin: isDesktop
-                ? const EdgeInsets.symmetric(vertical: 24, horizontal: 20)
-                : EdgeInsets.zero,
-            decoration: isDesktop
-                ? BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(
-                      color: const Color(0xFFE2E8F0),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
-                        blurRadius: 24,
-                        offset: const Offset(0, 8),
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
+      appBar: AppHeader(
+        greeting: 'Good morning, Alex',
+        title: 'Find what you love',
+        notificationCount: 3,
+        onNotificationTap: widget.onNotificationTap ?? _showNotificationDialog,
+        onProfileTap: widget.onProfileTap ?? () => _handleNavTap(4),
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: isDesktop ? 900 : double.infinity,
+          ),
+          child: Column(
+            children: [
+              // Scrollable Body Content
+              Expanded(
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    // 1. Search Bar
+                    SliverToBoxAdapter(
+                      child: SearchCategories(
+                        controller: _searchController,
+                        onChanged: (val) =>
+                            setState(() => _searchQuery = val),
+                        onClear: () {
+                          _searchController.clear();
+                          setState(() => _searchQuery = '');
+                        },
                       ),
-                    ],
-                  )
-                : null,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(isDesktop ? 28 : 0),
-              child: Column(
-                children: [
-                  // Scrollable Body Content
-                  Expanded(
-                    child: CustomScrollView(
-                      controller: _scrollController,
-                      slivers: [
-                        // 1. App Header
-                        SliverToBoxAdapter(
-                          child: AppHeader(
-                            greeting: 'Good morning, Alex',
-                            title: 'Find what you love',
-                            notificationCount: 3,
-                            onNotificationTap: widget.onNotificationTap ??
-                                _showNotificationDialog,
-                            onProfileTap: widget.onProfileTap ??
-                                () => _handleNavTap(4),
-                          ),
-                        ),
-
-                        // 2. Search Bar
-                        SliverToBoxAdapter(
-                          child: SearchCategories(
-                            controller: _searchController,
-                            onChanged: (val) =>
-                                setState(() => _searchQuery = val),
-                            onClear: () {
-                              _searchController.clear();
-                              setState(() => _searchQuery = '');
-                            },
-                          ),
-                        ),
-
-                        // 3. Filter Chips
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            child: CategoryFilterChips(
-                              selectedChip: _selectedFilterChip,
-                              onSelected: (chip) =>
-                                  setState(() => _selectedFilterChip = chip),
-                            ),
-                          ),
-                        ),
-
-                        // 4. Flash Sale Banner
-                        SliverToBoxAdapter(
-                          child: FlashSaleBanner(
-                            onShopNow: _scrollToGrid,
-                          ),
-                        ),
-
-                        // 5. Popular Categories
-                        SliverToBoxAdapter(
-                          child: PopularCategories(
-                            categories: _popularCategories,
-                            onCategoryTap: _openCategoryDetail,
-                            onToggleFavorite: _onToggleFavorite,
-                          ),
-                        ),
-
-                        const SliverToBoxAdapter(
-                          child: SizedBox(height: 18),
-                        ),
-
-                        // 6. Shop by Category (with GlobalKey for scroll target)
-                        SliverToBoxAdapter(
-                          key: _gridSectionKey,
-                          child: CategoryGrid(
-                            categories: _filteredCategories,
-                            isGridView: _isGridView,
-                            onToggleView: () =>
-                                setState(() => _isGridView = !_isGridView),
-                            onCategoryTap: _openCategoryDetail,
-                          ),
-                        ),
-
-                        // Bottom padding for scroll clearance
-                        const SliverToBoxAdapter(
-                          child: SizedBox(height: 100),
-                        ),
-                      ],
                     ),
-                  ),
 
-                  // 7. App Bottom Navigation
-                  if (widget.showBottomNav)
-                    ListenableBuilder(
-                      listenable: _cart,
-                      builder: (context, _) {
-                        return AppBottomNavigation(
-                          currentIndex: _selectedNavIndex,
-                          cartCount: _cart.totalCount,
-                          onTap: _handleNavTap,
-                        );
-                      },
+                    // 2. Filter Chips
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: CategoryFilterChips(
+                          selectedChip: _selectedFilterChip,
+                          onSelected: (chip) =>
+                              setState(() => _selectedFilterChip = chip),
+                        ),
+                      ),
                     ),
-                ],
+
+                    // 3. Flash Sale Banner
+                    SliverToBoxAdapter(
+                      child: FlashSaleBanner(
+                        onShopNow: _scrollToGrid,
+                      ),
+                    ),
+
+                    // 4. Popular Categories
+                    SliverToBoxAdapter(
+                      child: PopularCategories(
+                        categories: _popularCategories,
+                        onCategoryTap: _openCategoryDetail,
+                        onToggleFavorite: _onToggleFavorite,
+                      ),
+                    ),
+
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: 18),
+                    ),
+
+                    // 5. Shop by Category (with GlobalKey for scroll target)
+                    SliverToBoxAdapter(
+                      key: _gridSectionKey,
+                      child: CategoryGrid(
+                        categories: _filteredCategories,
+                        isGridView: _isGridView,
+                        onToggleView: () =>
+                            setState(() => _isGridView = !_isGridView),
+                        onCategoryTap: _openCategoryDetail,
+                      ),
+                    ),
+
+                    // Bottom padding for scroll clearance
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: 110),
+                    ),
+                  ],
+                ),
               ),
-            ),
+
+              // 6. App Bottom Navigation (when shown standalone)
+              if (widget.showBottomNav)
+                ListenableBuilder(
+                  listenable: _cart,
+                  builder: (context, _) {
+                    return AppBottomNavigation(
+                      currentIndex: _selectedNavIndex,
+                      cartCount: _cart.totalCount,
+                      onTap: _handleNavTap,
+                    );
+                  },
+                ),
+            ],
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../components/empty_state/empty_state.dart';
+import '../../../components/header/app_screen_header.dart';
 import '../../../components/toast/custom_toast.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/currency.dart';
@@ -21,47 +22,37 @@ class WishlistScreen extends StatelessWidget {
     final wishlist = WishlistController.instance;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
-      appBar: AppBar(
-        backgroundColor: isDark
-            ? AppColors.darkBackground
-            : AppColors.background,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Wishlist',
-          style: TextStyle(
-            color: isDark ? Colors.white : AppColors.textPrimary,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            letterSpacing: -0.3,
+    return ListenableBuilder(
+      listenable: wishlist,
+      builder: (context, _) {
+        final products = wishlist.products;
+
+        return Scaffold(
+          backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
+          appBar: AppScreenHeader(
+            title: 'Wishlist',
+            subtitle: 'Saved items',
+            badgeText: products.isNotEmpty ? '${products.length} items' : null,
+            leadingIcon: LucideIcons.heart,
+            leadingIconColor: const Color(0xFFF43F5E),
           ),
-        ),
-      ),
-      body: ListenableBuilder(
-        listenable: wishlist,
-        builder: (context, _) {
-          final products = wishlist.products;
-          if (products.isEmpty) {
-            return EmptyState(
-              icon: LucideIcons.heart,
-              title: 'No favorites yet',
-              message: 'Tap the heart on any product to save it here.',
-              buttonText: 'Browse Products',
-              onButtonTap: onBrowse,
-            );
-          }
-          return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
-            itemCount: products.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (context, index) =>
-                _WishlistTile(product: products[index]),
-          );
-        },
-      ),
+          body: products.isEmpty
+              ? EmptyState(
+                  icon: LucideIcons.heart,
+                  title: 'No favorites yet',
+                  message: 'Tap the heart on any product to save it here.',
+                  buttonText: 'Browse Products',
+                  onButtonTap: onBrowse,
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+                  itemCount: products.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) =>
+                      _WishlistTile(product: products[index]),
+                ),
+        );
+      },
     );
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../components/header/app_screen_header.dart';
 import '../../../components/toast/custom_toast.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../../../core/theme/theme_controller.dart';
 import '../../auth/screens/login_screen.dart';
+import '../../settings/screens/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   /// Open the Orders tab (used by "My Orders" and the order shortcuts).
@@ -35,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _MenuItem(LucideIcons.mapPin, 'Shipping Address'),
     _MenuItem(LucideIcons.creditCard, 'Payment Methods'),
     _MenuItem(LucideIcons.bell, 'Notifications'),
+    _MenuItem(LucideIcons.settings, 'Settings'),
     _MenuItem(LucideIcons.helpCircle, 'Help & Support'),
   ];
 
@@ -67,6 +70,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _showPaymentMethodsSheet(context);
       case 'Notifications':
         _showNotificationsSheet(context);
+      case 'Settings':
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const SettingsScreen()),
+        );
       case 'Help & Support':
         _showHelpSupportSheet(context);
       default:
@@ -500,24 +507,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
-      appBar: AppBar(
-        backgroundColor: isDark
-            ? AppColors.darkBackground
-            : AppColors.background,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+      appBar: AppScreenHeader(
+        title: 'Profile',
+        subtitle: 'Account & Preferences',
+        leadingIcon: Icons.person_rounded,
+        leadingIconColor: AppColors.primary,
+        actions: [
+          AppHeaderActionButton(
+            icon: LucideIcons.settings,
+            tooltip: 'Settings',
+            semanticLabel: 'Settings',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
           ),
-        ),
-        iconTheme: IconThemeData(
-          color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
-        ),
+        ],
       ),
       body: SafeArea(
         child: ListView(

@@ -30,9 +30,9 @@ class CustomSearchBar extends StatelessWidget {
             child: Container(
               height: 48,
               decoration: BoxDecoration(
-                color: AppTheme.cardBackground,
+                color: AppTheme.getCardBackground(context),
                 borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-                border: Border.all(color: AppTheme.border, width: 1),
+                border: Border.all(color: AppTheme.getBorder(context), width: 1),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.02),
@@ -44,21 +44,21 @@ class CustomSearchBar extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 onChanged: onChanged,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13.5,
-                  color: AppTheme.textPrimary,
+                  color: AppTheme.getTextPrimary(context),
                   fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: const TextStyle(
-                    color: AppTheme.textMuted,
+                  hintStyle: TextStyle(
+                    color: AppTheme.getTextMuted(context),
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                   ),
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     Icons.search_rounded,
-                    color: AppTheme.textSecondary,
+                    color: AppTheme.getTextSecondary(context),
                     size: 21,
                   ),
                   border: InputBorder.none,

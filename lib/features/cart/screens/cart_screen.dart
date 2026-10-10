@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../components/empty_state/empty_state.dart';
+import '../../../components/header/app_screen_header.dart';
 import '../../../components/toast/custom_toast.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/currency.dart';
@@ -79,56 +80,19 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
-      appBar: AppBar(
-        backgroundColor: isDark ? AppColors.darkBackground : Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: false,
-        title: Row(
-          children: [
-            Text(
-              'My Cart',
-              style: TextStyle(
-                color: isDark ? Colors.white : AppColors.textPrimary,
-                fontWeight: FontWeight.w800,
-                fontSize: 20,
-                letterSpacing: -0.3,
-              ),
-            ),
-            if (!cart.isEmpty) ...[
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(
-                    alpha: isDark ? 0.2 : 0.1,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${cart.totalCount} items',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
+      appBar: AppScreenHeader(
+        title: 'My Cart',
+        subtitle: 'Your shopping bag',
+        badgeText: !cart.isEmpty ? '${cart.totalCount} items' : null,
+        leadingIcon: Icons.shopping_bag_rounded,
+        leadingIconColor: AppColors.primary,
         actions: [
           if (!cart.isEmpty)
-            IconButton(
-              icon: Icon(
-                LucideIcons.trash2,
-                size: 19,
-                color: isDark
-                    ? AppColors.darkTextSecondary
-                    : AppColors.textSecondary,
-              ),
+            AppHeaderActionButton(
+              icon: LucideIcons.trash2,
               tooltip: 'Clear Cart',
-              onPressed: () {
+              semanticLabel: 'Clear Cart',
+              onTap: () {
                 showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
@@ -188,7 +152,6 @@ class _CartScreenState extends State<CartScreen> {
                 );
               },
             ),
-          const SizedBox(width: 8),
         ],
       ),
       body: ListenableBuilder(

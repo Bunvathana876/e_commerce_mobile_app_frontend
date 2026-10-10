@@ -7,7 +7,7 @@ import '../../../core/constants/colors.dart';
 /// - Title: "Find what you love"
 /// - Profile/avatar button
 /// - Notification button with a small badge
-class AppHeader extends StatelessWidget {
+class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String greeting;
   final String title;
   final int notificationCount;
@@ -24,14 +24,23 @@ class AppHeader extends StatelessWidget {
   });
 
   @override
+  Size get preferredSize => const Size.fromHeight(68);
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? AppColors.darkBackground : AppColors.background;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+    return Container(
+      color: bgColor,
+      child: SafeArea(
+        bottom: false,
+        child: Container(
+          height: 68,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
           // Avatar
           Semantics(
             label: 'User profile avatar',
@@ -77,38 +86,45 @@ class AppHeader extends StatelessWidget {
 
           // Greeting & Title
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  greeting,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.1,
-                    color: isDark
-                        ? AppColors.darkTextSecondary
-                        : const Color(0xFF64748B),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    greeting,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.1,
+                      height: 1.15,
+                      color: isDark
+                          ? AppColors.darkTextSecondary
+                          : const Color(0xFF64748B),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.4,
-                    color: isDark
-                        ? AppColors.darkTextPrimary
-                        : const Color(0xFF0F172A),
+                  const SizedBox(height: 2),
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.4,
+                      height: 1.15,
+                      color: isDark
+                          ? AppColors.darkTextPrimary
+                          : const Color(0xFF0F172A),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -169,7 +185,9 @@ class AppHeader extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 }
 

@@ -347,6 +347,8 @@ class _CategoryGridItem extends StatelessWidget {
                             ? Image.asset(
                                 cat.imageAsset!,
                                 fit: BoxFit.cover,
+                                cacheWidth: 400,
+                                cacheHeight: 300,
                                 errorBuilder: (context, error, stackTrace) =>
                                     _buildFallback(cat, isDark),
                               )
@@ -512,6 +514,8 @@ class _CategoryListItem extends StatelessWidget {
                         ? Image.asset(
                             cat.imageAsset!,
                             fit: BoxFit.cover,
+                            cacheWidth: 150,
+                            cacheHeight: 150,
                             errorBuilder: (context, error, stackTrace) =>
                                 Center(
                               child: Icon(

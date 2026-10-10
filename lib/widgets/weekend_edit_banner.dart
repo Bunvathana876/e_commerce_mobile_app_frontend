@@ -251,6 +251,8 @@ class _WeekendEditBannerState extends State<WeekendEditBanner>
                             child: Image.asset(
                               'assets/images/categories/fashion.png',
                               fit: BoxFit.contain,
+                              cacheWidth: 200,
+                              cacheHeight: 200,
                               errorBuilder: (context, error, stackTrace) =>
                                   const Icon(
                                     Icons.checkroom_rounded,

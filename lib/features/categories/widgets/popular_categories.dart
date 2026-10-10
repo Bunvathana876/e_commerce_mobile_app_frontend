@@ -259,6 +259,8 @@ class _PopularCategoryCardState extends State<_PopularCategoryCard>
                           ? Image.asset(
                               cat.imageAsset!,
                               fit: BoxFit.cover,
+                              cacheWidth: 400,
+                              cacheHeight: 300,
                               errorBuilder: (context, error, stackTrace) =>
                                   _buildFallback(cat, isDark),
                             )

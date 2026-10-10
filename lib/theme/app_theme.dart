@@ -9,13 +9,44 @@ class AppTheme {
   static const Color primaryDark = Color(0xFF1E3A8A); // Deep Navy
   static const Color primaryLight = Color(0xFFDBEAFE); // Soft Ice Blue
 
-  // Neutrals
+  // Neutrals (Light Mode defaults for backwards compatibility)
   static const Color background = Color(0xFFF8FAFC); // Very soft neutral light
   static const Color cardBackground = Colors.white;
   static const Color textPrimary = Color(0xFF0F172A); // Navy dark text
   static const Color textSecondary = Color(0xFF64748B); // Slate secondary
   static const Color textMuted = Color(0xFF94A3B8); // Muted slate
   static const Color border = Color(0xFFE2E8F0); // Subtle hairline border
+
+  // Dynamic context-aware theme getters
+  static Color getBackgroundColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF0F172A)
+          : background;
+
+  static Color getCardBackground(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF1E293B)
+          : cardBackground;
+
+  static Color getTextPrimary(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.white
+          : textPrimary;
+
+  static Color getTextSecondary(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF94A3B8)
+          : textSecondary;
+
+  static Color getTextMuted(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF64748B)
+          : textMuted;
+
+  static Color getBorder(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF334155)
+          : border;
 
   // Accent & functional
   static const Color saleRed = Color(0xFFEF4444);
@@ -75,6 +106,50 @@ class AppTheme {
           fontSize: 13,
           fontWeight: FontWeight.w400,
           color: textSecondary,
+        ),
+      ),
+    );
+  }
+
+  static ThemeData get darkTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: const Color(0xFF0F172A),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primary,
+        brightness: Brightness.dark,
+        primary: primary,
+        surface: const Color(0xFF1E293B),
+      ),
+      cardColor: const Color(0xFF1E293B),
+      dividerColor: const Color(0xFF334155),
+      textTheme: const TextTheme(
+        headlineMedium: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+          color: Colors.white,
+          letterSpacing: -0.4,
+        ),
+        titleLarge: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 14.5,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+          color: Color(0xFF94A3B8),
         ),
       ),
     );

@@ -62,6 +62,8 @@ class HomeHeader extends StatelessWidget {
                 child: Image.asset(
                   'assets/images/logo/Blue-and-White Panda Waving.png',
                   fit: BoxFit.cover,
+                  cacheWidth: 120,
+                  cacheHeight: 120,
                   errorBuilder: (context, error, stackTrace) => const Icon(
                     Icons.person_rounded,
                     color: AppColors.primary,

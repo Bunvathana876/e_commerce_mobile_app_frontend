@@ -5,7 +5,7 @@ import '../../../core/constants/colors.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../../cart/controllers/cart_controller.dart';
 import '../../cart/screens/cart_screen.dart';
-import '../../categories/screens/categories_screen.dart';
+import '../../categories/screens/categories_page.dart';
 import '../../deals/screens/deals_screen.dart';
 import '../../products/screens/product_detail_screen.dart';
 import '../../profile/screens/profile_screen.dart';
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => CategoriesScreen(initialCategoryId: categoryId),
+          builder: (_) => const CategoriesPage(),
         ),
       );
     }

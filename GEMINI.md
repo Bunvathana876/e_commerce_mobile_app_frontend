@@ -178,6 +178,42 @@
       - `lib/widgets/bottom_navigation.dart` (`BottomNavigation`): Fixed SafeArea-aware 5-tab bar (Home, Categories, Deals, Favorites, Profile).
       - `lib/screens/home_screen.dart` (`HomeScreen`): Clean, responsive shopping home screen supporting viewport sizes down to 347x657 without overflow.
     - **Verification**: 0 static analyzer issues (`flutter analyze`), 68/68 passing tests (`flutter test`).
+35. Built Full-Featured CategoriesPage & Sub-Widgets:
+    - 7 reusable widgets in `lib/features/categories/widgets/` (`app_header.dart`, `search_categories.dart`, `filter_chips.dart`, `flash_sale_banner.dart`, `popular_categories.dart`, `category_grid.dart`, `category_detail_sheet.dart`, `app_bottom_navigation.dart`).
+    - Responsive mobile and desktop viewport support, real-time query and chip filtering, animated bottom sheet with bestseller add-to-cart.
+36. Settings Screen, Universal Dark Mode Unification & Clean Design Consistency:
+    - **Settings Screen (`lib/features/settings/screens/settings_screen.dart`)**: Created a dedicated Settings screen accessible via Profile menu and `/settings` route. Features:
+      - **Appearance**: Dark Mode / Light Mode toggle with instant theme synchronization via `ThemeController.instance`.
+      - **Preferences**: Display currency switcher (USD `$`, EUR `€`, GBP `£`, KHR `៛`) with interactive bottom sheet modal; In-app sound effects toggle.
+      - **Notifications**: Push notifications, live order status updates, and flash sale/promotions alerts toggles.
+      - **Security & Storage**: Biometric quick login toggle (Face ID / Touch ID preference) and Clear Temporary Cache function with confirmation dialog and toast feedback.
+      - **About**: App version indicator (`v1.0.0`) and Terms of Service / Privacy Policy information.
+    - **Universal Dark Mode Support**:
+      - Unified `lib/theme/app_theme.dart` with context-aware helpers (`getBackgroundColor`, `getCardBackground`, `getTextPrimary`, `getTextSecondary`, `getTextMuted`, `getBorder`) and `AppTheme.darkTheme`.
+      - Updated `HomeScreen` and its widgets (`HomeHeaderWidget`, `CustomSearchBar`, `CategorySelector`, `ProductCard`, and filter/notification bottom sheets) to dynamically react to Dark Mode (`#0F172A` background, `#1E293B` cards, `#334155` borders, white text).
+      - Updated `CategoriesPage` scaffold and container surfaces to dynamically adapt to dark mode.
+    - **Consolidation**: Removed deprecated `categories_screen.dart` and its outdated test, consolidating all category navigation directly into the modular `CategoriesPage`.
+    - **Clean UI & Material 3 Styling**: Unified 16px corner radiuses, soft subtle shadows, consistent typography, and clean contrast across all screens.
+    - **Verification**: Zero analyzer warnings (`flutter analyze`), **76 passing tests** (`flutter test`).
+36. Unified Screen Headers, Lazy Loading, Dead Code Cleanup & Lighthouse Web Optimization:
+    - **Unified Screen Header Design Language**: Created `lib/components/header/app_screen_header.dart` (`AppScreenHeader` and `AppHeaderActionButton`) implementing `PreferredSizeWidget` with consistent 42×42 icon/avatar containers, clean title + subtitle hierarchy, dynamic counter pills, and 40×40 circular action buttons. Replaced fragmented default app bars across `DealsScreen`, `WishlistScreen`, `CartScreen`, `OrderHistoryScreen`, `ProfileScreen`, `SettingsScreen`, and `CheckoutScreen`.
+    - **Lazy Loading & Layout Shift (CLS) Prevention**: Added explicit `cacheWidth` and `cacheHeight` bounds to `Image.asset` and `Image.network` across `ProductCard`, `HomeProductCard`, `CategoryGrid`, `CategoryDetailSheet`, `PopularCategories`, and `WeekendEditBanner`. Constrained images with fixed aspect ratio surfaces to eliminate layout jumps when assets decode.
+    - **Dead Code Cleanup**: Safely removed obsolete unused files `lib/features/categories/components/category_grid_card.dart` and `lib/features/categories/data/category_data.dart`.
+    - **Lighthouse Web Optimization**: Upgraded `web/index.html` with `<html lang="en">`, `<meta name="viewport">` with scale controls, SEO descriptions, theme color `#2563EB`, font preconnect tags (`fonts.googleapis.com`, `fonts.gstatic.com`), and an inlined non-blocking CSS loader container with smooth fade-out on `flutter-first-frame` to completely eliminate initial CLS. Upgraded `web/manifest.json` with official ShopPanda branding and PWA metadata.
+    - **Verification**: 0 analyzer warnings (`flutter analyze`), **76/76 passing tests** (`flutter test`).
+37. Professional Project Architecture, Barrel Exports & Categories Visual Alignment:
+    - **Modular Barrel Exports**:
+      - `lib/core/core.dart`: Barrel export for all constants (`AppColors`, `AppSpacing`, `AppRadius`), storage (`SessionStorage`), theme controller, currency formatting, validators, and core API client.
+      - `lib/models/models.dart`: Barrel export for all domain models (`Product`, `Category`, `Cart`, `Order`, `User`, `Payment`, `Address`).
+      - `lib/components/components.dart`: Barrel export for all reusable components (`AppScreenHeader`, `AppHeaderActionButton`, `CustomPrimaryButton`, `CustomInputField`, `StatusBadge`, `EmptyStateWidget`, `Shimmer`, `showAppToast`).
+      - `lib/features/features.dart`: Barrel export for all primary screen endpoints and controllers.
+    - **CategoriesPage Visual Alignment**:
+      - Updated `AppHeader` to implement `PreferredSizeWidget` (`preferredSize: const Size.fromHeight(68)`) with `SafeArea(bottom: false, ...)` so it is pinned as `Scaffold.appBar: AppHeader(...)` just like `DealsScreen`, `WishlistScreen`, `CartScreen`, and `ProfileScreen`.
+      - Wrapped the greeting and title Column in `FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft)` to prevent RenderFlex overflow across varying device dimensions.
+      - Aligned background surfaces to `isDark ? AppColors.darkBackground : AppColors.background` (`#0F172A` / `#F8FAFC`).
+      - Replaced outer desktop card borders with clean content-level max-width centering (`ConstrainedBox(constraints: BoxConstraints(maxWidth: isDesktop ? 900 : double.infinity))`), giving full-bleed layout continuity across all tabs.
+      - Maintained `110px` bottom scroll clearance ensuring content is never obscured by the frosted glass floating bottom navigation bar.
+    - **Verification**: 0 analyzer warnings (`flutter analyze`), **76/76 passing tests** (`flutter test`).
 
 ## 3. Folder structure (feature-first)
 

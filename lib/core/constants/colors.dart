@@ -30,6 +30,8 @@ class AppColors {
   static const Color darkTextMuted = Color(0xFF64748B);
 
   static const Color error = Color(0xFFEF4444);
+  static const Color success = Color(0xFF10B981); // Emerald green
+  static const Color card = Colors.white;
 
   // Social brand colors
   static const Color facebook = Color(0xFF1877F2);
